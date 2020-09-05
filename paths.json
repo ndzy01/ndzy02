@@ -4,15 +4,6 @@
     "paths": {
       "@/*": [
         "src/*"
-      ],
-      "@_c/*": [
-        "src/component/*"
-      ],
-      "@_v/*": [
-        "src/view/*"
-      ],
-      "@_u/*": [
-        "src/utils/*"
       ]
     }
   }
