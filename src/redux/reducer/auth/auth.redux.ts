@@ -5,22 +5,16 @@ import { AnyObj } from '@/types';
 const auth: AnyObj[] = [];
 
 const actions = createActions({
-  [SET_AUTH]: (authInfo: AnyObj[]) => {
-    return authInfo;
-  },
-  [CLEAR_AUTH]: () => {
-    return [];
-  }
+  [SET_AUTH]: (authInfo: AnyObj[]) => authInfo,
+  [CLEAR_AUTH]: () => []
 });
-console.log(actions);
+// console.log(actions);
 export const setAuth = actions.setAuth;
 export const clearAuth = actions.clearAuth;
 
 export const authReducer = handleActions(
   {
-    [SET_AUTH]: (state: AnyObj[], action) => {
-      return action.payload;
-    },
+    [SET_AUTH]: (state: AnyObj[], action) => action.payload,
     [CLEAR_AUTH]: (state: AnyObj[], action) => action.payload
   },
   auth

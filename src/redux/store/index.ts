@@ -2,7 +2,18 @@ import { combineReducers, createStore, applyMiddleware, Store } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import { createLogger } from 'redux-logger';
 //
-import { authReducer as auth } from '@/redux/reducer';
+import {
+  authReducer as auth,
+  breadcrumbReducer as breadcrumb,
+  collapsedReducer as collapsed,
+  openKeysReducer as openKeys,
+  selectKeysReducer as selectKeys,
+  clearAuth,
+  clearBreadcrumb,
+  clearCollapsed,
+  clearOpenkeys,
+  clearSelectkeys
+} from '@/redux/reducer';
 //
 import { cacheData } from '@/redux/middleware/cacheData';
 
@@ -13,6 +24,13 @@ import { AnyObj } from '@/types';
 
 export interface MyStore extends Store {
   auth: AnyObj[];
+  breadcrumb: {
+    path?: string;
+    name: string;
+  }[];
+  collapsed: boolean;
+  openKeys: string[];
+  selectKeys: string[];
 }
 
 const middlewares: any = [];
@@ -29,7 +47,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const reducer = combineReducers({
-  auth
+  auth,
+  breadcrumb,
+  collapsed,
+  openKeys,
+  selectKeys
 });
 
 const state = getSession(SYSTEM_KEY);
@@ -44,3 +66,10 @@ export const store = createStore(
   initState,
   applyMiddleware(...middlewares)
 );
+export const clearStore = () => {
+  store.dispatch(clearAuth());
+  store.dispatch(clearBreadcrumb());
+  store.dispatch(clearCollapsed());
+  store.dispatch(clearOpenkeys());
+  store.dispatch(clearSelectkeys());
+};
