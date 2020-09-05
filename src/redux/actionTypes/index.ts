@@ -1,0 +1,39 @@
+// auth (认证信息)
+const SET_AUTH = 'SET_AUTH';
+const CLEAR_AUTH = 'CLEAR_AUTH';
+
+// breadcrumb 面包屑
+const CHANGE_BREADCRUMB = 'CHANGE_BREADCRUMB';
+const RESET_BREADCRUMB = 'RESET_BREADCRUMB';
+const CLEAR_BREADCRUMB = 'CLEAR_BREADCRUMB';
+
+// collapsed 导航菜单 状态
+const CHANGE_COLLAPSED = 'CHANGE_COLLAPSED';
+const CLEAR_COLLAPSED = 'CLEAR_COLLAPSED';
+
+// openKeys 导航菜单 展开的菜单
+const SET_OPENKEYS = 'SET_OPENKEYS';
+const CLEAR_OPENKEYS = 'CLEAR_OPENKEYS';
+
+// selectKeys 导航菜单 选中的菜单项
+const SET_SELECTKEYS = 'SET_SELECTKEYS';
+const CLEAR_SELECTKEYS = 'CLEAR_SELECTKEYS';
+
+export {
+  // authInfo
+  SET_AUTH,
+  CLEAR_AUTH,
+  // breadcrumb
+  CHANGE_BREADCRUMB,
+  RESET_BREADCRUMB,
+  CLEAR_BREADCRUMB,
+  //collapsed
+  CHANGE_COLLAPSED,
+  CLEAR_COLLAPSED,
+  // openKeys
+  SET_OPENKEYS,
+  CLEAR_OPENKEYS,
+  // selectKeys
+  SET_SELECTKEYS,
+  CLEAR_SELECTKEYS
+};
