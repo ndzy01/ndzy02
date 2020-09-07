@@ -10,13 +10,10 @@ export {
   changeCollapsed,
   clearCollapsed
 } from './collapsed/collapsed.redux';
+
 export {
-  openKeysReducer,
-  setOpenKeys,
-  clearOpenkeys
-} from './openKeys/openKeys.redux';
-export {
-  selectKeysReducer,
-  setSelectKeys,
-  clearSelectkeys
-} from './selectKeys/selectKeys.redux';
+  menuReducer,
+  menuOpenkeys,
+  menuSelectkeys,
+  clearMenu
+} from './menu/menu.redux';
