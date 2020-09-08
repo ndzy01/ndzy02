@@ -9,13 +9,9 @@ import { useMount, useUnmount } from 'ahooks';
 
 import SidebarMenu from './SidebarMenu';
 import Tabs from './Tabs';
-import Breadcrumbs from './Breadcrumbs';
+import { Breadcrumbs } from './Breadcrumbs';
 
 import { RootProps } from './Root';
-import { changeCollapsed, menuOpenkeys } from '@/redux/reducer';
-
-import { ActionFunctionAny } from 'redux-actions';
-import { Action } from 'redux';
 
 // utils
 import { getOpenKeysG } from './util';
@@ -24,22 +20,19 @@ import { MyStore } from '@/redux/store';
 interface Props extends RootProps, RouteChildrenProps, DispatchProp {
   collapsed: boolean;
   selectedKeys: string[];
-  changeCollapsed?: ActionFunctionAny<Action<any>>;
-  menuOpenkeys?: ActionFunctionAny<Action<any>>;
+  changeCollapsed?: (collapsed: boolean) => void;
+  menuOpenkeys?: (paths: string[]) => void;
   [propsName: string]: any;
 }
 
-export default connect(
-  (state: MyStore) => {
-    const { collapsed, menu } = state;
-    const { selectedKeys } = menu;
-    return {
-      collapsed,
-      selectedKeys
-    };
-  },
-  { changeCollapsed, menuOpenkeys }
-)((props: Props) => {
+export default connect((state: MyStore) => {
+  const { collapsed, menu } = state;
+  const { selectedKeys } = menu;
+  return {
+    collapsed,
+    selectedKeys
+  };
+}, {})((props: Props) => {
   const { collapsed, headerHeight } = props;
   const sidebarWidth = collapsed ? 56 : 220; //侧边栏收缩和展开的宽度
   const [menuScroll, setMenuScroll] = useState<any>();

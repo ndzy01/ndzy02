@@ -9,14 +9,13 @@ import {
   setAuth,
   changeBreadcrumb,
   resetBreadcrumb,
+  changeCollapsed,
   menuOpenkeys,
   menuSelectkeys
 } from '@/redux/reducer';
 
 import { MyStore } from '@/redux/store';
 
-import { ActionFunctionAny } from 'redux-actions';
-import { Action } from 'redux';
 import * as _ from 'lodash';
 
 const history = {
@@ -34,11 +33,17 @@ export interface RootProps extends DispatchProp {
   auth: any[];
   collapsed: boolean;
   breadcrumb: any[];
-  setAuth?: ActionFunctionAny<Action<any>>;
-  resetBreadcrumb?: ActionFunctionAny<Action<any>>;
-  changeBreadcrumb?: ActionFunctionAny<Action<any>>;
-  menuSelectkeys?: ActionFunctionAny<Action<any>>;
-  menuOpenkeys?: ActionFunctionAny<Action<any>>;
+  setAuth?: (auth: any[]) => void;
+  resetBreadcrumb?: (
+    breadcrumb: {
+      path?: string;
+      name: string;
+    }[]
+  ) => void;
+  changeBreadcrumb?: (breadcrumb: { path?: string; name: string }) => void;
+  menuSelectkeys?: (paths: string[]) => void;
+  menuOpenkeys?: (paths: string[]) => void;
+  changeCollapsed?: (collapsed: boolean) => void;
   [key: string]: any;
 }
 
@@ -56,7 +61,8 @@ export const Root = connect(mapStateToProps, {
   setAuth,
   changeBreadcrumb,
   menuOpenkeys,
-  menuSelectkeys
+  menuSelectkeys,
+  changeCollapsed
 })((props: RootProps) => {
   /**
    * @description 设置面包屑

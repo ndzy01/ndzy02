@@ -16,14 +16,6 @@ const MENU_OPENKEYS = 'MENU_OPENKEYS';
 const MENU_SELECTKEYS = 'MENU_SELECTKEYS';
 const CLEAR_MENU = 'CLEAR_Menu';
 
-// openKeys 导航菜单 展开的菜单
-const SET_OPENKEYS = 'SET_OPENKEYS';
-const CLEAR_OPENKEYS = 'CLEAR_OPENKEYS';
-
-// selectKeys 导航菜单 选中的菜单项
-const SET_SELECTKEYS = 'SET_SELECTKEYS';
-const CLEAR_SELECTKEYS = 'CLEAR_SELECTKEYS';
-
 export {
   // authInfo
   SET_AUTH,
@@ -38,11 +30,5 @@ export {
   // menu
   MENU_OPENKEYS,
   MENU_SELECTKEYS,
-  CLEAR_MENU,
-  // openKeys
-  SET_OPENKEYS,
-  CLEAR_OPENKEYS,
-  // selectKeys
-  SET_SELECTKEYS,
-  CLEAR_SELECTKEYS
+  CLEAR_MENU
 };

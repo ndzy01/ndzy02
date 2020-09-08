@@ -4,7 +4,7 @@ import { menuRouter } from '@/layout';
  * @description 获取打开的菜单
  * @param path
  */
-export function getOpenKeysG(path: string) {
+export function getOpenKeysG(path: string | undefined) {
   if (!path) {
     return [];
   }
@@ -22,7 +22,7 @@ export function getOpenKeysG(path: string) {
  * @description 获取选中的菜单项
  * @param path
  */
-export function getSelectKeysG(path: string) {
+export function getSelectKeysG(path: string | undefined) {
   if (!path) {
     return [];
   }
