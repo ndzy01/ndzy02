@@ -13,7 +13,7 @@ interface BreadcrumbStore {
 const breadcrumb: BreadcrumbStore[] = [];
 
 const breadcrumbAction = createActions({
-  [CHANGE_BREADCRUMB]: (breadcrums: BreadcrumbStore[]) => breadcrums,
+  [CHANGE_BREADCRUMB]: (breadcrum: BreadcrumbStore) => breadcrum,
   [RESET_BREADCRUMB]: (breadcrums: BreadcrumbStore[]) => breadcrums,
   [CLEAR_BREADCRUMB]: () => []
 });
@@ -24,12 +24,9 @@ export const clearBreadcrumb = breadcrumbAction.clearBreadcrumb;
 
 export const breadcrumbReducer = handleActions(
   {
-    [CHANGE_BREADCRUMB]: (state: BreadcrumbStore[], action: any) => [
-      ...state,
-      action.payload
-    ],
-    [RESET_BREADCRUMB]: (state: BreadcrumbStore[], action) => action.payload,
-    [CLEAR_BREADCRUMB]: (state: BreadcrumbStore[], action) => action.payload
+    [CHANGE_BREADCRUMB]: (state, action: any) => [...state, action.payload],
+    [RESET_BREADCRUMB]: (state, action) => [...action.payload],
+    [CLEAR_BREADCRUMB]: (state, action) => action.payload
   },
   breadcrumb
 );

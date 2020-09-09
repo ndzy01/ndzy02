@@ -6,13 +6,11 @@ import {
   authReducer as auth,
   breadcrumbReducer as breadcrumb,
   collapsedReducer as collapsed,
-  openKeysReducer as openKeys,
-  selectKeysReducer as selectKeys,
+  menuReducer as menu,
   clearAuth,
   clearBreadcrumb,
   clearCollapsed,
-  clearOpenkeys,
-  clearSelectkeys
+  clearMenu
 } from '@/redux/reducer';
 //
 import { cacheData } from '@/redux/middleware/cacheData';
@@ -29,8 +27,12 @@ export interface MyStore extends Store {
     name: string;
   }[];
   collapsed: boolean;
+  menu: {
+    openKeys: string[];
+    selectedKeys: string[];
+  };
   openKeys: string[];
-  selectKeys: string[];
+  selectedKeys: string[];
 }
 
 const middlewares: any = [];
@@ -50,8 +52,7 @@ const reducer = combineReducers({
   auth,
   breadcrumb,
   collapsed,
-  openKeys,
-  selectKeys
+  menu
 });
 
 const state = getSession(SYSTEM_KEY);
@@ -70,6 +71,5 @@ export const clearStore = () => {
   store.dispatch(clearAuth());
   store.dispatch(clearBreadcrumb());
   store.dispatch(clearCollapsed());
-  store.dispatch(clearOpenkeys());
-  store.dispatch(clearSelectkeys());
+  store.dispatch(clearMenu());
 };

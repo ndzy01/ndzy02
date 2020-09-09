@@ -13,6 +13,20 @@ yarn add craco-alias serve @types/react-router-dom @types/react-redux @types/red
 
 yarn add tailwindcss postcss-cli autoprefixer -D
 
+# ahooks
+
+yarn add ahooks
+
+# underscore lodash
+
+yarn add underscore lodash
+
+yarn add @types/underscore @types/lodash -D
+
+# perfect-scrollbar
+
+yarn add perfect-scrollbar
+
+yarn add @types/yarn add perfect-scrollbar -D
+
 ```
-
-

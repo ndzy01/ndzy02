@@ -11,13 +11,10 @@ const CLEAR_BREADCRUMB = 'CLEAR_BREADCRUMB';
 const CHANGE_COLLAPSED = 'CHANGE_COLLAPSED';
 const CLEAR_COLLAPSED = 'CLEAR_COLLAPSED';
 
-// openKeys 导航菜单 展开的菜单
-const SET_OPENKEYS = 'SET_OPENKEYS';
-const CLEAR_OPENKEYS = 'CLEAR_OPENKEYS';
-
-// selectKeys 导航菜单 选中的菜单项
-const SET_SELECTKEYS = 'SET_SELECTKEYS';
-const CLEAR_SELECTKEYS = 'CLEAR_SELECTKEYS';
+// menu 侧边导航栏
+const MENU_OPENKEYS = 'MENU_OPENKEYS';
+const MENU_SELECTKEYS = 'MENU_SELECTKEYS';
+const CLEAR_MENU = 'CLEAR_MENU';
 
 export {
   // authInfo
@@ -30,10 +27,8 @@ export {
   //collapsed
   CHANGE_COLLAPSED,
   CLEAR_COLLAPSED,
-  // openKeys
-  SET_OPENKEYS,
-  CLEAR_OPENKEYS,
-  // selectKeys
-  SET_SELECTKEYS,
-  CLEAR_SELECTKEYS
+  // menu
+  MENU_OPENKEYS,
+  MENU_SELECTKEYS,
+  CLEAR_MENU
 };
