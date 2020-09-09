@@ -17,7 +17,6 @@ interface Props extends RouteChildrenProps, DispatchProp {
     openKeys: string[];
     selectedKeys: string[];
   };
-
   auth: {}[];
   //
   [key: string]: any;
@@ -125,7 +124,7 @@ export default connect(mapStateToProps)((props: Props) => {
   };
   return (
     <Menu
-      className="layout-sidebar-menu"
+      className="frame-sidebar-content-menu"
       style={{ minHeight: '100%', width: '100%' }}
       mode="inline"
       theme="light"

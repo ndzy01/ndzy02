@@ -118,7 +118,7 @@ export const Root = connect(mapStateToProps, {
               path={item.path}
               render={(routeProps) => {
                 const Page = item.component; //页面
-
+                
                 return (
                   <Frame {...props} {...routeProps}>
                     <Page
@@ -146,7 +146,6 @@ export const Root = connect(mapStateToProps, {
               path={item.path}
               render={(routeProps) => {
                 const Page = item.component;
-
                 return (
                   <Page
                     {...routeProps}
@@ -162,9 +161,7 @@ export const Root = connect(mapStateToProps, {
             />
           );
         })}
-
         <Redirect exact path="/" to={{ pathname: '/login' }} />
-
         <Route
           render={(routeProps) => {
             let Error = errRouter[0].component;

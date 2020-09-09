@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Frame.scss';
 import { connect, DispatchProp } from 'react-redux';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { RouteChildrenProps } from 'react-router-dom';
@@ -14,7 +15,8 @@ import { Breadcrumbs } from './Breadcrumbs';
 import { RootProps } from './Root';
 
 // utils
-import { getOpenKeysG } from './util';
+import { getOpenKeysG } from '@/utils';
+
 import { MyStore } from '@/redux/store';
 
 interface Props extends RootProps, RouteChildrenProps, DispatchProp {
@@ -34,7 +36,7 @@ export default connect((state: MyStore) => {
   };
 }, {})((props: Props) => {
   const { collapsed, headerHeight } = props;
-  const sidebarWidth = collapsed ? 56 : 220; //侧边栏收缩和展开的宽度
+  const sidebarWidth = collapsed ? 88 : 236; //侧边栏收缩和展开的宽度
   const [menuScroll, setMenuScroll] = useState<any>();
 
   const handleCollapsedBtn = () => {
@@ -75,42 +77,40 @@ export default connect((state: MyStore) => {
     setMenuScroll(null);
   });
   return (
-    <div className="h-full w-full bg-gray-200 relative overflow-hidden ">
+    <div className="frame">
       {/* left */}
-      {/* duration-300 过渡动画 */}
-      <div
-        className="h-full absolute top-0 left-0 bg-teal-500 duration-300"
-        style={{ width: sidebarWidth }}
-      >
-        {/* logo */}
-        <div className="relative" style={{ height: headerHeight }}>
-          {props.logo(props.collapsed)}
-        </div>
-        {/* 导航菜单 */}
-        <div
-          id="menu-scrollbar"
-          className="w-full relative overflow-hidden "
-          style={{ height: `calc(100% - ${headerHeight + 40}px)` }}
-        >
-          <SidebarMenu {...props} />
-        </div>
-        {/* 收缩按钮 */}
-        <div className="h-8 w-full text-center ">
-          <span className=" text-2xl">
-            {collapsed ? (
-              <MenuUnfoldOutlined
-                onClick={() => {
-                  handleCollapsedBtn();
-                }}
-              />
-            ) : (
-              <MenuFoldOutlined
-                onClick={() => {
-                  handleCollapsedBtn();
-                }}
-              />
-            )}
-          </span>
+      <div className="frame-sidebar" style={{ width: sidebarWidth }}>
+        <div className="frame-sidebar-wrap">
+          {/* logo */}
+          <div className="relative" style={{ height: headerHeight }}>
+            {props.logo(props.collapsed)}
+          </div>
+          {/* 导航菜单 */}
+          <div
+            id="menu-scrollbar"
+            className="frame-sidebar-content"
+            style={{ height: `calc(100% - ${headerHeight + 40}px)` }}
+          >
+            <SidebarMenu {...props} />
+          </div>
+          {/* 收缩按钮 */}
+          <div className="h-8 w-full text-center">
+            <span className=" text-2xl">
+              {collapsed ? (
+                <MenuUnfoldOutlined
+                  onClick={() => {
+                    handleCollapsedBtn();
+                  }}
+                />
+              ) : (
+                <MenuFoldOutlined
+                  onClick={() => {
+                    handleCollapsedBtn();
+                  }}
+                />
+              )}
+            </span>
+          </div>
         </div>
       </div>
       {/* right */}

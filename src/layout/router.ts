@@ -1,11 +1,11 @@
 import { PageA0 } from '@/view/A/page0';
 import { PageA1 } from '@/view/A/page1';
 
-import { PageB0 } from '../view/B/page0';
+import { PageB0 } from '@/view/B/page0';
 
-import Login from '../view/login/Login';
+import Login from '@/view/login/Login';
 
-import { ErrorPage } from '../view/404/ErrorPage';
+import { ErrorPage } from '@/view/404/ErrorPage';
 
 const appConfig = {
   '404': true,

@@ -1,0 +1,74 @@
+.custom-tabs {
+  &-left,
+  &-right {
+    top: 15px;
+    color: #969ea5;
+    cursor: pointer;
+  }
+  &-left {
+    left: 7px;
+  }
+  &-right {
+    right: 7px;
+  }
+
+  &-notActive {
+    color: #dcdfe1;
+  }
+
+  &-wrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    &-move {
+      height: 100%;
+      display: inline-block;
+      white-space: nowrap;
+      transition: 0.3s;
+      &-item {
+        height: 100%;
+        display: inline-block;
+        padding: 0 32px 0 12px;
+        vertical-align: bottom;
+        position: relative;
+        cursor: pointer;
+        margin-left: -1px;
+        z-index: 10;
+
+        &-line {
+          width: 1px;
+          height: 12px;
+          background-color: #b4bcc4;
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        &-text {
+          line-height: 36px;
+          color: #787f85;
+        }
+
+        &-close-icon {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 12px;
+          color: #787f85;
+
+          &:hover {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  &-active {
+    background-color: #eee;
+    border-radius: 4px 4px 0 0;
+    z-index: 11;
+  }
+}

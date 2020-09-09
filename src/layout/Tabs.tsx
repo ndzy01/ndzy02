@@ -1,27 +1,27 @@
-import React, { MouseEvent, useRef, useState } from 'react';
+import React, { MouseEvent, useRef } from 'react';
+import './Tab.scss';
 import { connect } from 'react-redux';
 import { CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-
 import { RouteChildrenProps } from 'react-router-dom';
-import { resetBreadcrumb, menuOpenkeys, menuSelectkeys } from '@/redux/reducer';
 import { MyStore } from '@/redux/store';
-
-import { ActionFunctionAny } from 'redux-actions';
-import { Action } from 'redux';
 import { historyHash as history } from '@/utils';
-
-import { useMount } from 'ahooks';
+import { useMount, useSetState } from 'ahooks';
 
 // utils
-import { getOpenKeysG } from './util';
+import { getOpenKeysG } from '@/utils';
 
 interface Props extends RouteChildrenProps {
   breadcrumb: any[];
   selectedKeys: string[];
   collapsed: boolean;
-  resetBreadcrumb?: ActionFunctionAny<Action<any>>;
-  menuOpenkeys?: ActionFunctionAny<Action<any>>;
-  menuSelectkeys?: ActionFunctionAny<Action<any>>;
+  resetBreadcrumb?: (
+    breadcrums: {
+      path?: string;
+      name: string;
+    }[]
+  ) => void;
+  menuOpenkeys?: (paths: string[]) => void;
+  menuSelectkeys?: (paths: string[]) => void;
 }
 
 const mapStateToProps = (store: MyStore) => {
@@ -35,20 +35,26 @@ const mapStateToProps = (store: MyStore) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  resetBreadcrumb,
-  menuOpenkeys,
-  menuSelectkeys
-})((props: Props) => {
+export default connect(
+  mapStateToProps,
+  {}
+)((props: Props) => {
   const moveNode = useRef<any>();
   const fixedNode = useRef<any>();
-  const [left, setLeft] = useState(1);
-  const [rightBtn, setRightBtn] = useState(true);
-  const [leftBtn, setLeftBtn] = useState(true);
-  const [handleClickPath, setHandleClickPath] = useState('');
+  const [state, setState] = useSetState({
+    left: 1,
+    rightBtn: true,
+    leftBtn: true,
+    handleClickPath: ''
+  });
 
+  /**
+   * @description 点击
+   * @param path
+   */
   const handleClick = (path: string) => {
-    setHandleClickPath(path);
+    setState({ handleClickPath: path });
+    // setHandleClickPath(path);
 
     history.push(path);
     props.menuSelectkeys && props.menuSelectkeys([path]);
@@ -59,6 +65,11 @@ export default connect(mapStateToProps, {
     }
   };
 
+  /**
+   * @description
+   * @param path
+   * @param e
+   */
   const handleCloseTab = (path: string, e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -68,7 +79,6 @@ export default connect(mapStateToProps, {
       if (item.path === path) {
         closeIndex = index;
       }
-
       return item.path !== path;
     });
     // 删除的是选中的tab时才重设openKey和selectKey
@@ -122,13 +132,15 @@ export default connect(mapStateToProps, {
 
     let len = fixedW - moveW;
     let nextLeft = len < 0 ? len : 1;
-    setLeft(nextLeft);
-    setLeftBtn(nextLeft < 0);
-    setRightBtn(nextLeft > fixedW - moveW);
+    setState({
+      left: nextLeft,
+      leftBtn: nextLeft < 0,
+      rightBtn: nextLeft > fixedW - moveW
+    });
   };
 
   const moveLeft = () => {
-    if (!leftBtn) {
+    if (!state.leftBtn) {
       return;
     }
 
@@ -142,13 +154,15 @@ export default connect(mapStateToProps, {
       leftBtn_ = false;
     }
 
-    setLeft(nextLeft);
-    setLeftBtn(leftBtn_);
-    setRightBtn(nextLeft > fixedW - moveW);
+    setState({
+      left: nextLeft,
+      leftBtn: leftBtn_,
+      rightBtn: nextLeft > fixedW - moveW
+    });
   };
 
   const moveRight = () => {
-    if (!rightBtn) {
+    if (!state.rightBtn) {
       return;
     }
 
@@ -161,9 +175,12 @@ export default connect(mapStateToProps, {
       nextLeft = fixedW - moveW;
       rightBtn_ = false;
     }
-    setLeft(nextLeft);
-    setLeftBtn(nextLeft < 0);
-    setRightBtn(rightBtn_);
+
+    setState({
+      left: nextLeft,
+      leftBtn: nextLeft < 0,
+      rightBtn: rightBtn_
+    });
   };
 
   useMount(() => {
@@ -171,11 +188,11 @@ export default connect(mapStateToProps, {
   });
 
   return (
-    <div className="custom-tabs">
+    <div className="custom-tabs relative overflow-auto c-p-t-4 c-p-x-28 h-full w-full bg-white">
       <span>
         <LeftOutlined
-          className={`custom-tabs-left ${
-            leftBtn ? '' : 'custom-tabs-notActive'
+          className={`custom-tabs-left absolute ${
+            state.leftBtn ? '' : 'custom-tabs-notActive'
           }`}
           onClick={() => {
             moveLeft();
@@ -183,8 +200,8 @@ export default connect(mapStateToProps, {
         />
 
         <RightOutlined
-          className={`custom-tabs-right ${
-            rightBtn ? '' : 'custom-tabs-notActive'
+          className={`custom-tabs-right absolute ${
+            state.rightBtn ? '' : 'custom-tabs-notActive'
           }`}
           onClick={() => {
             moveRight();
@@ -195,7 +212,7 @@ export default connect(mapStateToProps, {
         <div
           className="custom-tabs-wrap-move"
           ref={moveNode}
-          style={{ transform: `translateX(${left}px)` }}
+          style={{ transform: `translateX(${state.left}px)` }}
         >
           {props.breadcrumb.map((item) => {
             let bool: boolean = item.path === props.selectedKeys[0];
@@ -207,7 +224,7 @@ export default connect(mapStateToProps, {
                 }`}
                 key={item.path}
                 onClick={() => {
-                  if (item.path !== handleClickPath) {
+                  if (item.path !== state.handleClickPath) {
                     handleClick(item.path);
                   }
                 }}

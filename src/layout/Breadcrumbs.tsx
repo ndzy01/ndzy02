@@ -5,7 +5,7 @@ import { RouteChildrenProps } from 'react-router-dom';
 import { MyStore } from '@/redux/store';
 
 // utils
-import { getOpenKeysG, getSelectKeysG } from './util';
+import { getOpenKeysG, getSelectKeysG } from '@/utils';
 
 interface Props extends RouteChildrenProps {
   breadcrumb: {
