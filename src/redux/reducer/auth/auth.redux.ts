@@ -14,8 +14,8 @@ export const clearAuth = actions.clearAuth;
 
 export const authReducer = handleActions(
   {
-    [SET_AUTH]: (state: AnyObj[], action) => action.payload,
-    [CLEAR_AUTH]: (state: AnyObj[], action) => action.payload
+    [SET_AUTH]: (state, action) => action.payload,
+    [CLEAR_AUTH]: (state, action) => action.payload
   },
   auth
 );

@@ -14,7 +14,7 @@ const CLEAR_COLLAPSED = 'CLEAR_COLLAPSED';
 // menu 侧边导航栏
 const MENU_OPENKEYS = 'MENU_OPENKEYS';
 const MENU_SELECTKEYS = 'MENU_SELECTKEYS';
-const CLEAR_MENU = 'CLEAR_Menu';
+const CLEAR_MENU = 'CLEAR_MENU';
 
 export {
   // authInfo

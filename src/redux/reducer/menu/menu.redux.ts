@@ -17,12 +17,7 @@ const menu: {
 const menuAction = createActions({
   [MENU_OPENKEYS]: (openKeys: string[]) => openKeys,
   [MENU_SELECTKEYS]: (selectedKeys: string[]) => selectedKeys,
-  [CLEAR_MENU]: () => {
-    return {
-      openKeys: [],
-      selectedKeys: []
-    };
-  }
+  [CLEAR_MENU]: () => menu
 });
 // console.log(menuAction);
 export const menuOpenkeys = menuAction.menuOpenkeys;
