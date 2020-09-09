@@ -21,6 +21,18 @@ export const PageA0 = (props: Props) => {
             label: 'AAAA',
             type: 'text',
             value: '1'
+          },
+          {
+            name: 't2',
+            label: 'AAAA',
+            type: 'input',
+            value: '1',
+            rules: [
+              {
+                type: 'required',
+                showErr: true
+              }
+            ]
           }
         ]}
       ></Form>

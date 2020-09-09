@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormConfig } from './types';
-import { useSetState } from 'ahooks';
+import { Input } from 'antd';
+import { useSetState, useMount, useUpdate, useUpdateEffect } from 'ahooks';
 import { AnyObj } from '@/types';
+import { rules } from './validate';
 interface Props extends FormConfig {
   setParentState: (state: AnyObj) => void;
   parentColumn: number;
@@ -9,13 +11,6 @@ interface Props extends FormConfig {
   [key: string]: any;
 }
 export const FormItem = (props: Props) => {
-  // useEffect(() => {
-  //   props.setParentState({
-  //     [props.name]: {
-  //       getValue: getValue
-  //     }
-  //   });
-  // }, []);
   const [state, setState] = useSetState({
     defaultValue: '',
     value: '',
@@ -75,9 +70,125 @@ export const FormItem = (props: Props) => {
       inputWidth
     };
   };
-  const getValue = () => {
-    return '11';
+  // 验证表单数据
+  const validateValue = (
+    value: any
+  ): { isPass: boolean; msg: string; showErr?: boolean } => {
+    let isPass = true;
+    let msg = '';
+    let showErr = true;
+
+    if (props.rules) {
+      for (let i = 0; i < props.rules.length; i++) {
+        let item = props.rules[i];
+        let rule = rules[item.type];
+
+        showErr = item.showErr === false ? false : true;
+
+        if (item.type === 'maxLen' && item.num && value) {
+          isPass = value.length <= item.num;
+          msg = item.msg || '';
+        }
+        if (item.type === 'minLen' && item.num && value) {
+          isPass = value.length >= item.num;
+          msg = item.msg || '';
+        }
+
+        // 内置校验方式
+        if (rule) {
+          isPass = rule.reg.test(value || '');
+
+          msg = item.msg || rule.msg;
+        }
+
+        if (item.type === 'confirm' && item.name) {
+          let brotherValue = props.refBrother[item.name].getValue();
+
+          isPass = brotherValue === value;
+          msg = item.msg || '';
+        }
+
+        // 自定义的校验方式
+        if (item.type === 'custom') {
+          let result = item.validate
+            ? item.validate(value)
+            : { isPass: false, msg: '' };
+
+          isPass = result.isPass;
+          msg = item.msg || result.msg;
+        }
+        //校验文件上传的空
+        // console.log(props.type, item.type, value);
+        if (
+          props.type === 'upload' &&
+          item.type === 'required' &&
+          (!value || value.length === 0)
+        ) {
+          isPass = false;
+        }
+
+        //校验富文本的空
+        // const reg = /<[^>]+>/g;
+        // if (reg.test(value)) {
+        //   console.log('reg-', value);
+        // }
+
+        // 验证失败，不再验证其它的规则
+        if (!isPass) {
+          break;
+        }
+      }
+    }
+
+    return {
+      isPass,
+      msg,
+      showErr
+    };
   };
+
+  const getValue = (isValidate: boolean = true): any => {
+    if (isValidate) {
+      const result = validateValue(state.value);
+
+      // 返回数据前，先进行校验
+      if (!result.isPass) {
+        setState({
+          validate: result
+        });
+
+        return false;
+      }
+
+      if (!state.validate.isPass) {
+        setState({
+          validate: result
+        });
+      }
+    }
+    return state.value;
+  };
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    let value = e.target.value;
+    setState({
+      value
+    });
+  };
+  useMount(() => {
+    if (props.value) {
+      setState({
+        value: props.value
+      });
+    }
+  });
+  useUpdateEffect(() => {
+    props.setParentState({
+      [props.name]: { getValue }
+    });
+  }, [state.value]);
+
   const itemWidth = props.itemStyle || getWidth();
   return (
     <div className="formItem">
@@ -97,7 +208,28 @@ export const FormItem = (props: Props) => {
         className={`itemInput ${state.validate.isPass ? '' : 'validate-error'}`}
       >
         {props.type === 'text' &&
-          (props.render ? props.render(props.name) : props.value || '')}
+          (props.render
+            ? props.render(props.name)
+            : props.value || state.defaultValue)}
+        {props.type === 'input' && (
+          <Input
+            autoComplete="off"
+            placeholder={props.placeholder}
+            suffix={props.suffix}
+            addonAfter={props.addonAfter}
+            value={state.value}
+            onChange={(e) => {
+              handleInput(e);
+            }}
+            disabled={props.disabled}
+          />
+        )}
+        {/* 验证提示 */}
+        {state.validate.isPass ? (
+          ''
+        ) : (
+          <span className="text-red-500">{state.validate.msg}</span>
+        )}
       </span>
     </div>
   );

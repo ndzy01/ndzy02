@@ -1,8 +1,9 @@
 import React, { useEffect, createContext } from 'react';
+import './Form.scss';
 import { FormItem } from './FormItem';
 import { Button } from 'antd';
 import { FormProps } from './types';
-import { useSetState } from 'ahooks';
+import { useSetState, useMount } from 'ahooks';
 
 const FormContext = createContext({});
 
@@ -12,10 +13,40 @@ export const Form = (props: FormProps) => {
       getValue: any;
     };
   }>({});
+  useMount(() => {
+    // console.log(state['t1'] && state['t1'].getValue());
+  });
 
   useEffect(() => {
-    console.log(state['t1'] && state['t1'].getValue());
+    const a = getFormData();
+    console.log(a);
   });
+  const getFormData = (isValidate: boolean = true): {} | boolean => {
+    let data: { [propName: string]: any } = {};
+    let isAllPass = true;
+
+    props.formConfig.forEach((item) => {
+      let key = item.name;
+
+      if (!state[key]) {
+        return;
+      }
+
+      const value = state[key].getValue(isValidate);
+
+      data[key] = value;
+
+      if (value === false) {
+        isAllPass = false;
+      }
+    });
+
+    if (!isAllPass) {
+      return false;
+    }
+
+    return data;
+  };
   return (
     <FormContext.Provider value={state}>
       <div className="custom-form">
