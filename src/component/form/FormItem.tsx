@@ -1,25 +1,24 @@
 import React from 'react';
-import { FormConfig } from './types';
-import { Input } from 'antd';
-import { useSetState, useMount, useUpdate, useUpdateEffect } from 'ahooks';
-import { AnyObj } from '@/types';
+import { FormItemType, FormItemProps } from './types';
+import { useSetState, useMount, useUpdateEffect } from 'ahooks';
 import { rules } from './validate';
-interface Props extends FormConfig {
-  setParentState: (state: AnyObj) => void;
-  parentColumn: number;
-  refBrother: { [key: string]: any };
-  [key: string]: any;
-}
-export const FormItem = (props: Props) => {
+import { FormValidateMsg } from './FormValidateMsg';
+import { FormItemInput } from './FormItemInput';
+import { FormItemText } from './FormItemText';
+import { FormItemContext } from './context';
+
+export const FormItem = (props: FormItemProps) => {
   const [state, setState] = useSetState({
     defaultValue: '',
     value: '',
     validate: {
       isPass: true,
       msg: ''
-    }
+    },
+    mount: false
   });
 
+  //#region getRequire 显示必填*号
   /**
    * @description 显示必填*号
    */
@@ -39,7 +38,12 @@ export const FormItem = (props: Props) => {
 
     return null;
   };
-  // 计算表单label和input的宽度
+  //#endregion
+
+  //#region getWidth 计算表单label和input的宽度
+  /**
+   * @description 计算表单label和input的宽度
+   */
   const getWidth = (): { labelWidth: string; inputWidth: string } => {
     let labelWidth = '';
     let inputWidth = '';
@@ -70,7 +74,13 @@ export const FormItem = (props: Props) => {
       inputWidth
     };
   };
-  // 验证表单数据
+  //#endregion
+
+  //#region validateValue 验证表单数据
+  /**
+   * @description 验证表单数据
+   * @param value
+   */
   const validateValue = (
     value: any
   ): { isPass: boolean; msg: string; showErr?: boolean } => {
@@ -146,7 +156,13 @@ export const FormItem = (props: Props) => {
       showErr
     };
   };
+  //#endregion
 
+  //#region getValue 获取数据 setValue 设置数据
+  /**
+   * @description 获取数据
+   * @param isValidate
+   */
   const getValue = (isValidate: boolean = true): any => {
     if (isValidate) {
       const result = validateValue(state.value);
@@ -168,69 +184,106 @@ export const FormItem = (props: Props) => {
     }
     return state.value;
   };
+  /**
+   * @description 设置数据
+   * @param value
+   */
+  const setValue = (value: any) => {
+    let result = validateValue(value);
+
+    if (!result.isPass && result.showErr === false) {
+      return;
+    }
+
+    setState({
+      value,
+      validate: result
+    });
+    // if (this.props.type === 'switch') {
+    //   const v = this.getSwitchValue(value);
+    //   this.props.onChange && this.props.onChange(v);
+    // } else {
+    //   this.props.onChange && this.props.onChange(value);
+    // }
+  };
+  //#endregion
+
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    let value = e.target.value;
-    setState({
-      value
-    });
+    const value = e.target.value;
+    if (props.validateValueOnChange) {
+      setValue(value);
+    } else {
+      setState({
+        value
+      });
+    }
   };
+  //#region 生命周期
   useMount(() => {
+    setState({
+      mount: true
+    });
     if (props.value) {
       setState({
         value: props.value
       });
     }
+    props.setParentState({
+      [props.name]: { getValue, setValue }
+    });
   });
   useUpdateEffect(() => {
     props.setParentState({
-      [props.name]: { getValue }
+      [props.name]: { getValue, setValue }
     });
   }, [state.value]);
-
+  useUpdateEffect(() => {
+    if (props.value) {
+      setState({
+        value: props.value
+      });
+    }
+  }, [props.value]);
+  //#endregion
   const itemWidth = props.itemStyle || getWidth();
+  //#region 渲染函数
+  const renderFormItem = (type: FormItemType, props: FormItemProps) => {
+    if (type === 'text') {
+      return <FormItemText {...props} />;
+    } else if (type === 'input') {
+      return <FormItemInput {...props} handleInput={handleInput} />;
+    }
+  };
+  //#endregion
+
   return (
-    <div className="formItem">
-      {props.label && (
-        <span style={{ width: itemWidth.labelWidth }} className="itemLabel">
-          {getRequire()}
-          {props.label}：
-        </span>
-      )}
+    <FormItemContext.Provider value={state}>
+      <div className="formItem">
+        {props.label && (
+          <span style={{ width: itemWidth.labelWidth }} className="itemLabel">
+            {getRequire()}
+            {props.label}：
+          </span>
+        )}
 
-      {!props.label && props.labelShould && (
-        <span style={{ width: itemWidth.labelWidth }} className="itemLabel" />
-      )}
+        {!props.label && props.labelShould && (
+          <span style={{ width: itemWidth.labelWidth }} className="itemLabel" />
+        )}
 
-      <span
-        style={{ width: itemWidth.inputWidth }}
-        className={`itemInput ${state.validate.isPass ? '' : 'validate-error'}`}
-      >
-        {props.type === 'text' &&
-          (props.render
-            ? props.render(props.name)
-            : props.value || state.defaultValue)}
-        {props.type === 'input' && (
-          <Input
-            autoComplete="off"
-            placeholder={props.placeholder}
-            suffix={props.suffix}
-            addonAfter={props.addonAfter}
-            value={state.value}
-            onChange={(e) => {
-              handleInput(e);
-            }}
-            disabled={props.disabled}
+        <span
+          style={{ width: itemWidth.inputWidth }}
+          className={`itemInput ${
+            state.validate.isPass ? '' : 'validate-error'
+          }`}
+        >
+          {renderFormItem(props.type, props)}
+          <FormValidateMsg
+            msg={state.validate.isPass ? null : state.validate.msg}
           />
-        )}
-        {/* 验证提示 */}
-        {state.validate.isPass ? (
-          ''
-        ) : (
-          <span className="text-red-500">{state.validate.msg}</span>
-        )}
-      </span>
-    </div>
+        </span>
+      </div>
+    </FormItemContext.Provider>
   );
 };

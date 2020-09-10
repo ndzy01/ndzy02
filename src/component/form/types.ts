@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 import { TimePickerProps } from 'antd/lib/time-picker';
 import { TreeNode } from 'antd/lib/tree-select';
+import { AnyObj } from '@/types';
 //#region
 type TreeNode = TreeNodeNormal | TreeNodeSimpleMode;
 type TreeNodeValue = string | number | string[] | number[];
@@ -20,7 +21,7 @@ interface TreeNodeSimpleMode {
   [key: string]: string | boolean | React.ReactNode;
 }
 
-type FormItemType =
+export type FormItemType =
   | 'text'
   | 'input'
   | 'select'
@@ -123,10 +124,17 @@ export interface FormConfig {
   switchData?: { value: any; checked: boolean }[];
   maxHeight?: number;
   maxLength?: number;
+  // 验证时机
+  validateValueOnChange?: boolean;
 }
 //#endregion
 //#region
 export interface FormProps {
+  ref: {
+    current?: {
+      getFormData: any;
+    };
+  };
   formConfig: FormConfig[];
   column?: number | undefined;
   hasBtn?: boolean;
@@ -141,3 +149,9 @@ export interface FormProps {
   };
 }
 //#endregion
+export interface FormItemProps extends FormConfig {
+  setParentState: (state: AnyObj) => void;
+  parentColumn: number;
+  refBrother: { [key: string]: any };
+  [key: string]: any;
+}
