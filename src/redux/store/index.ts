@@ -17,7 +17,7 @@ import { cacheData } from '@/redux/middleware/cacheData';
 
 //
 import { getSession } from '@/utils';
-import { SYSTEM_KEY } from '@/constant';
+import { SYSTEM_KEY, IS_REDUX_LOG } from '@/constant';
 import { AnyObj } from '@/types';
 
 export interface MyStore extends Store {
@@ -39,13 +39,15 @@ const middlewares: any = [];
 middlewares.push(promiseMiddleware);
 middlewares.push(cacheData as any);
 if (process.env.NODE_ENV === 'development') {
-  //创建中间件logger
-  const logger = createLogger({
-    predicate: () => {
-      return true;
-    }
-  });
-  middlewares.push(logger);
+  if (IS_REDUX_LOG) {
+    //创建中间件logger
+    const logger = createLogger({
+      predicate: () => {
+        return true;
+      }
+    });
+    middlewares.push(logger);
+  }
 }
 
 const reducer = combineReducers({
