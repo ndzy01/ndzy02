@@ -6,19 +6,6 @@
     vertical-align: top;
   }
 
-  .formItemWrapRight {
-    float: right;
-    position: relative;
-    right: 0;
-    min-height: 44px;
-
-    .formItem {
-      position: absolute;
-      right: 0;
-      width: auto;
-    }
-  }
-
   .formItem {
     width: 100%;
     padding: 6px 0;
