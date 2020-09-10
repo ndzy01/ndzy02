@@ -73,6 +73,12 @@ interface Rule {
   validate?: (value: any) => { isPass: boolean; msg: string };
 }
 export interface FormConfig {
+  formItemClassName?: {
+    itemClassName?: string;
+    itemLabelClassName?: string;
+    itemInputClassName?: string;
+    errMsgClassName?: string;
+  };
   name: string;
   type: FormItemType;
   value?: any;
@@ -140,13 +146,9 @@ export interface FormProps {
   hasBtn?: boolean;
   onSearch?: (data: {}) => void;
   onReset?: (data: {}) => void;
-  className?: string;
   labelWidth?: number;
   inputWidth?: number;
-  itemStyle?: {
-    labelWidth: string;
-    inputWidth: string;
-  };
+  formItemClassName?: string;
 }
 //#endregion
 export interface FormItemProps extends FormConfig {

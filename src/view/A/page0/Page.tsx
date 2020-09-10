@@ -59,6 +59,15 @@ export const PageA0 = (props: Props) => {
         ref={ref}
         formConfig={[
           {
+            itemStyle: {
+              labelWidth: '100px',
+              inputWidth: '200px'
+            },
+            formItemClassName: {
+              itemClassName: 'A',
+              itemLabelClassName: 'B',
+              itemInputClassName: 'c'
+            },
             name: 't1',
             label: 'AAAA',
             type: 'text',

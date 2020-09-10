@@ -104,7 +104,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
 
         return (
           <div
-            className={`formItemWrap ${props.className}`}
+            className={`formItemWrap ${props.formItemClassName}`}
             key={item.name}
             style={{ width: `${(1 / column) * 100}%` }}
           >
@@ -119,7 +119,6 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
               refBrother={state[item.name]}
               labelWidth={props.labelWidth || 30}
               inputWidth={props.inputWidth || 70}
-              itemStyle={props.itemStyle}
             />
           </div>
         );

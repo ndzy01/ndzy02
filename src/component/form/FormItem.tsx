@@ -247,7 +247,7 @@ export const FormItem = (props: FormItemProps) => {
     }
   }, [props.value]);
   //#endregion
-  const itemWidth = props.itemStyle || getWidth();
+  const itemWidth = props.itemStyle ? props.itemStyle : getWidth();
   //#region 渲染函数
   const renderFormItem = (type: FormItemType, props: FormItemProps) => {
     if (type === 'text') {
@@ -260,27 +260,47 @@ export const FormItem = (props: FormItemProps) => {
 
   return (
     <FormItemContext.Provider value={state}>
-      <div className="formItem">
+      <div
+        className={`formItem ${
+          props.formItemClassName && props.formItemClassName.itemClassName
+        }`}
+      >
         {props.label && (
-          <span style={{ width: itemWidth.labelWidth }} className="itemLabel">
+          <span
+            style={{ width: itemWidth.labelWidth }}
+            className={`itemLabel ${
+              props.formItemClassName &&
+              props.formItemClassName.itemLabelClassName
+            }`}
+          >
             {getRequire()}
             {props.label}：
           </span>
         )}
 
         {!props.label && props.labelShould && (
-          <span style={{ width: itemWidth.labelWidth }} className="itemLabel" />
+          <span
+            style={{ width: itemWidth.labelWidth }}
+            className={`itemLabel ${
+              props.formItemClassName &&
+              props.formItemClassName.itemInputClassName
+            }`}
+          />
         )}
 
         <span
           style={{ width: itemWidth.inputWidth }}
-          className={`itemInput ${
-            state.validate.isPass ? '' : 'validate-error'
-          }`}
+          className={`${
+            props.formItemClassName &&
+            props.formItemClassName.itemInputClassName
+          } ${state.validate.isPass ? '' : 'validate-error'}`}
         >
           {renderFormItem(props.type, props)}
           <FormValidateMsg
             msg={state.validate.isPass ? null : state.validate.msg}
+            className={
+              props.formItemClassName && props.formItemClassName.errMsgClassName
+            }
           />
         </span>
       </div>
