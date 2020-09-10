@@ -191,6 +191,7 @@ export const FormItem = (props: FormItemProps) => {
   const setValue = (value: any) => {
     let result = validateValue(value);
 
+    // TODO: showErr
     if (!result.isPass && result.showErr === false) {
       return;
     }
@@ -212,6 +213,7 @@ export const FormItem = (props: FormItemProps) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const value = e.target.value;
+
     if (props.validateValueOnChange) {
       setValue(value);
     } else {

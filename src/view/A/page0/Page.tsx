@@ -86,12 +86,12 @@ export const PageA0 = (props: Props) => {
             name: 't2',
             label: 'AAAA',
             type: 'input',
-            value: '1',
+            // value: '1',
             validateValueOnChange: true,
             rules: [
               {
                 type: 'required',
-                showErr: true
+                showErr: false
               }
             ]
           }
