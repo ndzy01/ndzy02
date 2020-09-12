@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useMount, useUpdateEffect, useSetState } from 'ahooks';
+import { useMount, useUpdateEffect } from 'ahooks';
 import { rules } from './validate';
 import { FormContext } from './context';
 import { FormItemProps, FormItemType } from './types';

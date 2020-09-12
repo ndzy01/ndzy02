@@ -2,8 +2,6 @@ import React, { useRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
 import { useMount, useSetState } from 'ahooks';
 import { Input } from 'antd';
-// import { Form } from '@/component/form';
-import { Form as Form1 } from '@/component/form1';
 import { Form as Form2 } from '@/component/form2';
 
 interface Props extends RouteChildrenProps {
@@ -19,7 +17,7 @@ export const PageA0 = (props: Props) => {
   const ref: any = useRef();
   useMount(() => {});
   const getData = () => {
-    console.log(ref.current.getFormData());
+    console.log(ref.current.getFormData(false));
   };
   const getData1 = () => {
     ref.current.clearFormItem('t2');
@@ -117,6 +115,7 @@ export const PageA0 = (props: Props) => {
 
       <Form2
         ref={ref}
+        column={3}
         // isShowMessage={true}
         formConfig={[
           {
@@ -124,6 +123,7 @@ export const PageA0 = (props: Props) => {
             //   labelWidth: 1,
             //   inputWidth: 2
             // },
+            column: 2,
             formItemClassName: {
               itemWrap: 'AA',
               item: 'A',
@@ -149,7 +149,7 @@ export const PageA0 = (props: Props) => {
                 </>
               )
             },
-            validate: true,
+            validate: false,
             rules: [
               {
                 type: 'required',
@@ -162,7 +162,7 @@ export const PageA0 = (props: Props) => {
             label: 'AAAA',
             type: 'input',
             value: '1',
-            validate: true,
+            validate: false,
             rules: [
               {
                 type: 'required',
