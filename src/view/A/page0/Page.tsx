@@ -12,12 +12,14 @@ interface Props extends RouteChildrenProps {
 // 函数模板页面
 export const PageA0 = (props: Props) => {
   const [state, setState] = useSetState({
-    value: ''
+    value: '',
+    value1: '11',
+    isPass: 'N'
   });
   const ref: any = useRef();
   useMount(() => {});
   const getData = () => {
-    console.log(ref.current.getFormData(false));
+    console.log(ref.current.getFormData());
   };
   const getData1 = () => {
     ref.current.clearFormItem('t2');
@@ -30,7 +32,6 @@ export const PageA0 = (props: Props) => {
     <div className="Page">
       <span className="text-green-500 text-4xl ">函数模板页面</span>
       <br />
-
       <button
         onClick={() => {
           getData();
@@ -39,7 +40,6 @@ export const PageA0 = (props: Props) => {
         获取数据
       </button>
       <br />
-
       <button
         onClick={() => {
           getData1();
@@ -55,74 +55,13 @@ export const PageA0 = (props: Props) => {
       >
         重置
       </button>
-
-      {/* <Form1
-        ref={ref}
-        // isShowMessage={true}
-        formConfig={[
-          {
-            // formItemStyle: {
-            //   labelWidth: 1,
-            //   inputWidth: 2
-            // },
-            formItemClassName: {
-              itemWrap: 'AA',
-              item: 'A',
-              itemLabel: 'B',
-              itemInput: 'c'
-            },
-            name: 't1',
-            label: 'AAAA',
-            labelShould: true,
-            type: 'text',
-            value: state.value,
-            textType: {
-              render: () => (
-                <>
-                  <Input
-                    value={state.value}
-                    onChange={(e) => {
-                      setState({
-                        value: e.target.value
-                      });
-                    }}
-                  ></Input>
-                </>
-              )
-            },
-            rules: [
-              {
-                type: 'required',
-                showErr: true
-              }
-            ]
-          },
-          {
-            name: 't2',
-            label: 'AAAA',
-            type: 'input',
-            value: '1',
-            validateValueOnChange: true,
-            rules: [
-              {
-                type: 'required',
-                showErr: true
-              }
-            ]
-          }
-        ]}
-      ></Form1> */}
-
+      {/* {console.log(state)} */}
       <Form2
         ref={ref}
         column={3}
         // isShowMessage={true}
         formConfig={[
           {
-            // formItemStyle: {
-            //   labelWidth: 1,
-            //   inputWidth: 2
-            // },
             column: 2,
             formItemClassName: {
               itemWrap: 'AA',
@@ -131,7 +70,7 @@ export const PageA0 = (props: Props) => {
               itemInput: 'c'
             },
             name: 't1',
-            label: 'AAAA',
+            label: state.isPass === 'Y' ? 'AAA' : 'BBB',
             labelShould: true,
             type: 'text',
             value: state.value,
@@ -155,20 +94,41 @@ export const PageA0 = (props: Props) => {
                 type: 'required',
                 showErr: true
               }
-            ]
+            ],
+            hidden: state.isPass === 'Y' ? true : false
           },
           {
             name: 't2',
-            label: 'AAAA',
+            label: state.isPass === 'Y' ? 'abc' : 'BBB',
             type: 'input',
-            value: '1',
-            validate: false,
-            rules: [
-              {
-                type: 'required',
-                showErr: true
+            value: state.value1,
+            validate: true,
+            onChange: (value) => {
+              // 使用方式 配合内部状态 实现 属性的自由配置
+              if (value === '22') {
+                setState({
+                  isPass: 'Y',
+                  value1: value
+                });
+              } else {
+                setState({
+                  isPass: 'N',
+                  value1: value
+                });
               }
-            ]
+              // 获取 当前的数据
+              // console.log(ref.current.getFormData());
+              // console.log(ref.current.getFormData(false));
+            },
+            rules:
+              state.isPass !== 'Y'
+                ? [
+                    {
+                      type: 'required',
+                      showErr: true
+                    }
+                  ]
+                : []
           }
         ]}
       ></Form2>

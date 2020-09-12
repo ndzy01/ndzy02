@@ -26,15 +26,18 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     _.map(formConfig, (item) => {
       const key = item.name;
       const { value, validateValue } = state[key];
-      if (finalValidate) {
-        setState({
-          [item.name]: {
-            ...state[key],
-            validate: validateValue && validateValue(value)
-          }
-        });
+      // 隐藏不获取数据 不校验
+      if (!item.hidden) {
+        if (finalValidate) {
+          setState({
+            [item.name]: {
+              ...state[key],
+              validate: validateValue && validateValue(value)
+            }
+          });
+        }
+        data[key] = value;
       }
-      data[key] = value;
       return item;
     });
 
@@ -46,15 +49,17 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
       if (!state[key]) {
         break;
       }
-      const validate = validateValue && validateValue(value);
-      if (validate) {
-        isAllPass = validate.isPass;
-        if (validate.isPass === false) {
-          break;
+      // 隐藏不获取数据 不校验
+      if (!element.hidden) {
+        const validate = validateValue && validateValue(value);
+        if (validate) {
+          isAllPass = validate.isPass;
+          if (validate.isPass === false) {
+            break;
+          }
         }
       }
     }
-
     if (!isAllPass) {
       if (!finalValidate) {
         return data;

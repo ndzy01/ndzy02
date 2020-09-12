@@ -103,7 +103,8 @@ export const FormItem = (props: FormItemProps) => {
    */
   const setValue = (value: any) => {
     const result = validateValue(value);
-    if (props.validate) {
+    const isValidate = props.validate === false ? false : true;
+    if (isValidate) {
       props.setParentState({
         [props.name]: {
           ...state,
@@ -130,9 +131,10 @@ export const FormItem = (props: FormItemProps) => {
   //#endregion
 
   //#region 生命周期
-  useMount(() => {
+  const setState = () => {
     props.setParentState({
       [props.name]: {
+        ...state,
         defaultValue: props.value,
         value: props.value,
         validate: props.validate
@@ -144,23 +146,12 @@ export const FormItem = (props: FormItemProps) => {
         validateValue
       }
     });
+  };
+  useMount(() => {
+    setState();
   });
   useUpdateEffect(() => {
-    if (props.textType && props.textType.render) {
-      props.setParentState({
-        // text 类型需要重新赋值
-        [props.name]: {
-          defaultValue: props.value,
-          value: props.value,
-          validate: props.validate
-            ? validateValue(props.value)
-            : { isPass: true, msg: '' },
-          getValue,
-          setValue,
-          validateValue
-        }
-      });
-    }
+    setState();
   }, [props.value]);
   //#endregion
 

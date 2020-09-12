@@ -10,6 +10,7 @@ export interface FormContextItem {
     msg: string;
   };
   mount?: boolean;
+  hidden: boolean;
   getValue?: () => any;
   setValue?: (value: any) => void;
   validateValue?: (
@@ -61,6 +62,8 @@ export interface FormConfig {
   labelShould?: boolean; // all
   hidden?: boolean; // all
   validate?: boolean; // all
+  onChange?: (value: any) => void; //all
+
   // ----------------
   textType?: {
     render?: (name: string) => JSX.Element | JSX.Element[] | null;
@@ -84,7 +87,6 @@ export interface FormConfig {
       };
   // treeData?: TreeNode[];
   // treeDataTree?: TreeNodeNormal[];
-  onChange?: (value: any) => void;
   mode?: 'multiple' | 'tags' | undefined;
   visibilityToggle?: boolean;
 
