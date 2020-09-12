@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
 import { useMount, useSetState } from 'ahooks';
 import { Input } from 'antd';
-import { Form } from '@/component/form';
+// import { Form } from '@/component/form';
+import { Form as Form1 } from '@/component/form1';
 
 interface Props extends RouteChildrenProps {
   setBreadcrumb: (data: { path?: string; name: string }[] | string) => void;
@@ -55,7 +56,7 @@ export const PageA0 = (props: Props) => {
       >
         重置
       </button>
-      <Form
+      {/* <Form
         ref={ref}
         formConfig={[
           {
@@ -96,7 +97,63 @@ export const PageA0 = (props: Props) => {
             ]
           }
         ]}
-      ></Form>
+      ></Form> */}
+      <Form1
+        ref={ref}
+        // isShowMessage={true}
+        formConfig={[
+          {
+            // formItemStyle: {
+            //   labelWidth: 1,
+            //   inputWidth: 2
+            // },
+            formItemClassName: {
+              itemWrap: 'AA',
+              item: 'A',
+              itemLabel: 'B',
+              itemInput: 'c'
+            },
+            name: 't1',
+            label: 'AAAA',
+            labelShould: true,
+            type: 'text',
+            value: state.value,
+            textType: {
+              render: () => (
+                <>
+                  <Input
+                    value={state.value}
+                    onChange={(e) => {
+                      setState({
+                        value: e.target.value
+                      });
+                    }}
+                  ></Input>
+                </>
+              )
+            },
+            rules: [
+              {
+                type: 'required',
+                showErr: true
+              }
+            ]
+          },
+          {
+            name: 't2',
+            label: 'AAAA',
+            type: 'input',
+            value: '1',
+            validateValueOnChange: true,
+            rules: [
+              {
+                type: 'required',
+                showErr: true
+              }
+            ]
+          }
+        ]}
+      ></Form1>
     </div>
   );
 };
