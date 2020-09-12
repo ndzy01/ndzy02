@@ -17,7 +17,6 @@ export const FormItem = (props: FormItemProps) => {
     },
     mount: false
   });
-  console.log(props);
 
   //#region getRequire 显示必填*号
   /**
@@ -28,7 +27,7 @@ export const FormItem = (props: FormItemProps) => {
       return null;
     }
 
-    let requiredRule = props.rules.find((item) => {
+    const requiredRule = props.rules.find((item) => {
       return item.type === 'required';
     });
 

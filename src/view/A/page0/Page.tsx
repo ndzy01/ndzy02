@@ -4,6 +4,7 @@ import { useMount, useSetState } from 'ahooks';
 import { Input } from 'antd';
 // import { Form } from '@/component/form';
 import { Form as Form1 } from '@/component/form1';
+import { Form as Form2 } from '@/component/form2';
 
 interface Props extends RouteChildrenProps {
   setBreadcrumb: (data: { path?: string; name: string }[] | string) => void;
@@ -56,49 +57,8 @@ export const PageA0 = (props: Props) => {
       >
         重置
       </button>
-      {/* <Form
-        ref={ref}
-        formConfig={[
-          {
-            itemStyle: {
-              labelWidth: '100px',
-              inputWidth: '200px'
-            },
-            formItemClassName: {
-              itemClassName: 'A',
-              itemLabelClassName: 'B',
-              itemInputClassName: 'c'
-            },
-            name: 't1',
-            label: 'AAAA',
-            type: 'text',
-            value: state.value,
-            render: () => (
-              <Input
-                onChange={(e) => {
-                  setState({
-                    value: e.target.value
-                  });
-                }}
-              ></Input>
-            )
-          },
-          {
-            name: 't2',
-            label: 'AAAA',
-            type: 'input',
-            // value: '1',
-            validateValueOnChange: true,
-            rules: [
-              {
-                type: 'required',
-                showErr: false
-              }
-            ]
-          }
-        ]}
-      ></Form> */}
-      <Form1
+
+      {/* <Form1
         ref={ref}
         // isShowMessage={true}
         formConfig={[
@@ -153,7 +113,66 @@ export const PageA0 = (props: Props) => {
             ]
           }
         ]}
-      ></Form1>
+      ></Form1> */}
+
+      <Form2
+        ref={ref}
+        // isShowMessage={true}
+        formConfig={[
+          {
+            // formItemStyle: {
+            //   labelWidth: 1,
+            //   inputWidth: 2
+            // },
+            formItemClassName: {
+              itemWrap: 'AA',
+              item: 'A',
+              itemLabel: 'B',
+              itemInput: 'c'
+            },
+            name: 't1',
+            label: 'AAAA',
+            labelShould: true,
+            type: 'text',
+            value: state.value,
+            textType: {
+              render: () => (
+                <>
+                  <Input
+                    value={state.value}
+                    onChange={(e) => {
+                      setState({
+                        value: e.target.value
+                      });
+                    }}
+                  ></Input>
+                </>
+              )
+            },
+            rules: [
+              {
+                type: 'required',
+                showErr: true
+              }
+            ]
+          },
+          {
+            name: 't2',
+            label: 'AAAA',
+            type: 'input',
+            value: '1',
+            inputType: {
+              validateValueOnChange: false
+            },
+            rules: [
+              {
+                type: 'required',
+                showErr: true
+              }
+            ]
+          }
+        ]}
+      ></Form2>
     </div>
   );
 };

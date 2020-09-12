@@ -52,6 +52,7 @@ export interface FormConfig {
   inputType?: {
     maxLen?: number;
     placeholder?: string;
+    validateValueOnChange?: boolean;
   };
 
   selectOptions?: Option[];
@@ -91,8 +92,8 @@ export interface FormConfig {
   switchData?: { value: any; checked: boolean }[];
   maxHeight?: number;
   maxLength?: number;
-  // 验证时机
-  validateValueOnChange?: boolean;
+  // // 验证时机
+  // validateValueOnChange?: boolean;
 }
 
 export interface FormProps {
