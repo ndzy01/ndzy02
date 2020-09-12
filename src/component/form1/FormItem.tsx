@@ -1,11 +1,12 @@
 import React from 'react';
-import { FormItemType, FormItemProps } from './types';
-import { useSetState, useMount, useUpdateEffect } from 'ahooks';
+import { useMount, useUpdateEffect, useSetState } from 'ahooks';
 import { rules } from './validate';
-import { FormValidateMsg } from './FormValidateMsg';
-import { FormItemInput } from './FormItemInput';
-import { FormItemText } from './FormItemText';
 import { FormItemContext } from './context';
+import { FormItemProps, FormItemType } from './types';
+import { FormItemLabel } from './FormItemLabel';
+import { FormItemValidateErrorMsg } from './FormItemValidateErrorMsg';
+import { FormItemText } from './FormItemText';
+import { FormItemInput } from './FormItemInput';
 
 export const FormItem = (props: FormItemProps) => {
   const [state, setState] = useSetState({
@@ -17,28 +18,6 @@ export const FormItem = (props: FormItemProps) => {
     },
     mount: false
   });
-
-  //#region getRequire 显示必填*号
-  /**
-   * @description 显示必填*号
-   */
-  const getRequire = (): null | JSX.Element => {
-    if (!props.rules) {
-      return null;
-    }
-
-    const requiredRule = props.rules.find((item) => {
-      return item.type === 'required';
-    });
-
-    if (requiredRule) {
-      // 显示必填*号
-      return <span className="requireSymbol">*</span>;
-    }
-
-    return null;
-  };
-  //#endregion
 
   //#region getWidth 计算表单label和input的宽度
   /**
@@ -68,11 +47,11 @@ export const FormItem = (props: FormItemProps) => {
       labelWidth = '';
       inputWidth = '100%';
     }
-
-    return {
+    const itemWidth = props.formitemStyle || {
       labelWidth,
       inputWidth
     };
+    return itemWidth;
   };
   //#endregion
 
@@ -90,52 +69,52 @@ export const FormItem = (props: FormItemProps) => {
 
     if (props.rules) {
       for (let i = 0; i < props.rules.length; i++) {
-        let item = props.rules[i];
-        let rule = rules[item.type];
+        const item = props.rules[i];
+        const rule = rules[item.type];
 
         showErr = item.showErr === false ? false : true;
 
-        if (item.type === 'maxLen' && item.num && value) {
-          isPass = value.length <= item.num;
-          msg = item.msg || '';
-        }
-        if (item.type === 'minLen' && item.num && value) {
-          isPass = value.length >= item.num;
-          msg = item.msg || '';
-        }
-
-        // 内置校验方式
+        // 内置 校验方式
         if (rule) {
           isPass = rule.reg.test(value || '');
-
           msg = item.msg || rule.msg;
         }
+        // 其他 校验方式
 
-        if (item.type === 'confirm' && item.name) {
-          let brotherValue = props.refBrother[item.name].getValue();
+        // if (item.type === 'maxLen' && item.num && value) {
+        //   isPass = value.length <= item.num;
+        //   msg = item.msg || '';
+        // }
+        // if (item.type === 'minLen' && item.num && value) {
+        //   isPass = value.length >= item.num;
+        //   msg = item.msg || '';
+        // }
 
-          isPass = brotherValue === value;
-          msg = item.msg || '';
-        }
+        // if (item.type === 'confirm' && item.name) {
+        //   let brotherValue = props.refBrother[item.name].getValue();
 
-        // 自定义的校验方式
-        if (item.type === 'custom') {
-          let result = item.validate
-            ? item.validate(value)
-            : { isPass: false, msg: '' };
+        //   isPass = brotherValue === value;
+        //   msg = item.msg || '';
+        // }
 
-          isPass = result.isPass;
-          msg = item.msg || result.msg;
-        }
-        //校验文件上传的空
-        // console.log(props.type, item.type, value);
-        if (
-          props.type === 'upload' &&
-          item.type === 'required' &&
-          (!value || value.length === 0)
-        ) {
-          isPass = false;
-        }
+        // // 自定义的校验方式
+        // if (item.type === 'custom') {
+        //   let result = item.validate
+        //     ? item.validate(value)
+        //     : { isPass: false, msg: '' };
+
+        //   isPass = result.isPass;
+        //   msg = item.msg || result.msg;
+        // }
+        // //校验文件上传的空
+        // // console.log(props.type, item.type, value);
+        // if (
+        //   props.type === 'upload' &&
+        //   item.type === 'required' &&
+        //   (!value || value.length === 0)
+        // ) {
+        //   isPass = false;
+        // }
 
         //校验富文本的空
         // const reg = /<[^>]+>/g;
@@ -172,7 +151,6 @@ export const FormItem = (props: FormItemProps) => {
         setState({
           validate: result
         });
-
         return false;
       }
 
@@ -184,12 +162,14 @@ export const FormItem = (props: FormItemProps) => {
     }
     return state.value;
   };
+
   /**
    * @description 设置数据
    * @param value
    */
   const setValue = (value: any) => {
-    let result = validateValue(value);
+    // 对数据进行校验
+    const result = validateValue(value);
 
     // TODO: showErr
     if (!result.isPass && result.showErr === false) {
@@ -200,6 +180,8 @@ export const FormItem = (props: FormItemProps) => {
       value,
       validate: result
     });
+
+    props.onChange && props.onChange(value);
     // if (this.props.type === 'switch') {
     //   const v = this.getSwitchValue(value);
     //   this.props.onChange && this.props.onChange(v);
@@ -209,29 +191,16 @@ export const FormItem = (props: FormItemProps) => {
   };
   //#endregion
 
-  const handleInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const value = e.target.value;
-
-    if (props.validateValueOnChange) {
-      setValue(value);
-    } else {
-      setState({
-        value
-      });
-    }
-  };
   //#region 生命周期
   useMount(() => {
     setState({
       mount: true
     });
-    if (props.value) {
-      setState({
-        value: props.value
-      });
-    }
+    setState({
+      value: props.value || undefined,
+      defaultValue: props.value || undefined
+    });
+
     props.setParentState({
       [props.name]: { getValue, setValue }
     });
@@ -242,66 +211,61 @@ export const FormItem = (props: FormItemProps) => {
     });
   }, [state.value]);
   useUpdateEffect(() => {
-    if (props.value) {
-      setState({
-        value: props.value
-      });
-    }
+    setState({
+      value: props.value || undefined,
+      defaultValue: props.value || undefined
+    });
   }, [props.value]);
   //#endregion
-  const itemWidth = props.itemStyle ? props.itemStyle : getWidth();
+
   //#region 渲染函数
   const renderFormItem = (type: FormItemType, props: FormItemProps) => {
     if (type === 'text') {
       return <FormItemText {...props} />;
     } else if (type === 'input') {
-      return <FormItemInput {...props} handleInput={handleInput} />;
+      return (
+        <FormItemInput
+          {...props}
+          setValue={setValue}
+          setParentState={setState}
+        />
+      );
     }
   };
-  //#endregion
 
+  //#endregion
   return (
     <FormItemContext.Provider value={state}>
       <div
         className={`formItem ${
-          props.formItemClassName && props.formItemClassName.itemClassName
+          props.formItemClassName && props.formItemClassName.item
         }`}
       >
-        {props.label && (
-          <span
-            style={{ width: itemWidth.labelWidth }}
-            className={`itemLabel ${
-              props.formItemClassName &&
-              props.formItemClassName.itemLabelClassName
-            }`}
-          >
-            {getRequire()}
-            {props.label}：
-          </span>
-        )}
-
-        {!props.label && props.labelShould && (
-          <span
-            style={{ width: itemWidth.labelWidth }}
-            className={`itemLabel ${
-              props.formItemClassName &&
-              props.formItemClassName.itemInputClassName
-            }`}
-          />
-        )}
-
+        <FormItemLabel
+          label={props.label}
+          labelShould={props.labelShould}
+          width={getWidth().labelWidth}
+          itemLabel={
+            props.formItemClassName && props.formItemClassName.itemLabel
+          }
+          rules={props.rules}
+          itemRequireSymbol={
+            props.formItemClassName && props.formItemClassName.itemRequireSymbol
+          }
+        />
         <span
-          style={{ width: itemWidth.inputWidth }}
-          className={`${
-            props.formItemClassName &&
-            props.formItemClassName.itemInputClassName
-          } ${state.validate.isPass ? '' : 'validate-error'}`}
+          style={{ width: getWidth().inputWidth }}
+          className={`itemInput ${
+            state.validate.isPass ? '' : 'validate-error'
+          }`}
         >
           {renderFormItem(props.type, props)}
-          <FormValidateMsg
-            msg={state.validate.isPass ? null : state.validate.msg}
-            className={
-              props.formItemClassName && props.formItemClassName.errMsgClassName
+          <FormItemValidateErrorMsg
+            isPass={state.validate.isPass}
+            msg={state.validate.msg}
+            itemValidateErrMsg={
+              props.formItemClassName &&
+              props.formItemClassName.itemValidateErrMsg
             }
           />
         </span>
