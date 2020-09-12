@@ -149,6 +149,7 @@ export const PageA0 = (props: Props) => {
                 </>
               )
             },
+            validate: true,
             rules: [
               {
                 type: 'required',
@@ -161,9 +162,7 @@ export const PageA0 = (props: Props) => {
             label: 'AAAA',
             type: 'input',
             value: '1',
-            inputType: {
-              validateValueOnChange: false
-            },
+            validate: true,
             rules: [
               {
                 type: 'required',

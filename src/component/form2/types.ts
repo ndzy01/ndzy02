@@ -2,6 +2,21 @@ import { Moment } from 'moment';
 import { TimePickerProps } from 'antd/lib/time-picker';
 import { AnyObj } from '@/types';
 
+export interface FormContextItem {
+  defaultValue?: string;
+  value?: string;
+  validate?: {
+    isPass: boolean;
+    msg: string;
+  };
+  mount?: boolean;
+  getValue?: () => any;
+  setValue?: (value: any) => void;
+  validateValue?: (
+    value: any
+  ) => { isPass: boolean; msg: string; showErr?: boolean };
+}
+
 interface Option {
   value: string;
   label: string;
@@ -45,6 +60,7 @@ export interface FormConfig {
   rules?: Rule[]; // all
   labelShould?: boolean; // all
   hidden?: boolean; // all
+  validate?: boolean; // all
   // ----------------
   textType?: {
     render?: (name: string) => JSX.Element | JSX.Element[] | null;
@@ -52,7 +68,6 @@ export interface FormConfig {
   inputType?: {
     maxLen?: number;
     placeholder?: string;
-    validateValueOnChange?: boolean;
   };
 
   selectOptions?: Option[];

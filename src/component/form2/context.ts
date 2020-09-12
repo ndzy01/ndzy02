@@ -1,14 +1,5 @@
 import { createContext } from 'react';
+import { FormContextItem } from './types';
 export const FormContext = createContext<{
-  [key: string]: {
-    defaultValue?: string;
-    value?: string;
-    validate?: {
-      isPass: boolean;
-      msg: string;
-    };
-    mount?: boolean;
-    getValue?: (isValidate: boolean) => any;
-    setValue?: (value: any, isValidate?: boolean) => void;
-  };
+  [key: string]: FormContextItem;
 }>({});

@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle } from 'react';
 import { message } from 'antd';
 import './Form.scss';
 import { FormItem } from './FormItem';
-import { FormProps } from './types';
+import { FormProps, FormContextItem } from './types';
 import { useSetState } from 'ahooks';
 import { FormContext } from './context';
 import * as _ from 'lodash';
@@ -10,17 +10,7 @@ import { AnyObj } from '@/types';
 
 export const Form = forwardRef((props: FormProps, ref: any) => {
   const [state, setState] = useSetState<{
-    [key: string]: {
-      defaultValue?: string;
-      value?: string;
-      validate?: {
-        isPass: boolean;
-        msg: string;
-      };
-      mount?: boolean;
-      getValue?: (isValidate: boolean) => any;
-      setValue?: (value: any, isValidate?: boolean) => void;
-    };
+    [key: string]: FormContextItem;
   }>();
 
   //#region getFormData
@@ -28,14 +18,22 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
    * @description 获取表单数据
    * @param isValidate
    */
-  const getFormData = (isValidate: boolean = true): {} | boolean => {
+  const getFormData = (finalValidate: boolean = true): {} | boolean => {
     const data: AnyObj = {};
     const formConfig = _.cloneDeep(props.formConfig);
     let isAllPass = true;
 
     _.map(formConfig, (item) => {
       const key = item.name;
-      const { value } = state[key];
+      const { value, validateValue } = state[key];
+      if (finalValidate) {
+        setState({
+          [item.name]: {
+            ...state[key],
+            validate: validateValue && validateValue(value)
+          }
+        });
+      }
       data[key] = value;
       return item;
     });
@@ -43,11 +41,12 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     for (let index = 0; index < formConfig.length; index++) {
       const element = formConfig[index];
       const key = element.name;
+      const { value, validateValue } = state[key];
 
       if (!state[key]) {
         break;
       }
-      const { validate } = state[key];
+      const validate = validateValue && validateValue(value);
       if (validate) {
         isAllPass = validate.isPass;
         if (validate.isPass === false) {
@@ -57,7 +56,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     }
 
     if (!isAllPass) {
-      if (!isValidate) {
+      if (!finalValidate) {
         return data;
       }
       return false;

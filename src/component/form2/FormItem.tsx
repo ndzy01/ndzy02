@@ -92,32 +92,8 @@ export const FormItem = (props: FormItemProps) => {
   //#region getValue 获取数据 setValue 设置数据
   /**
    * @description 获取数据
-   * @param isValidate
    */
-  const getValue = (isValidate: boolean = true): any => {
-    if (isValidate) {
-      const result = validateValue(state.value);
-
-      // 返回数据前，先进行校验
-      if (!result.isPass) {
-        props.setParentState({
-          [props.name]: {
-            validate: result
-          }
-        });
-
-        return false;
-      }
-      if (state.validate) {
-        if (!state.validate.isPass) {
-          props.setParentState({
-            [props.name]: {
-              validate: result
-            }
-          });
-        }
-      }
-    }
+  const getValue = (): any => {
     return state.value;
   };
 
@@ -125,15 +101,24 @@ export const FormItem = (props: FormItemProps) => {
    * @description 设置数据
    * @param value
    */
-  const setValue = (value: any, isValidate: boolean = true) => {
-    // 对数据进行校验
-    let result = validateValue(value);
-    props.setParentState({
-      [props.name]: {
-        value,
-        validate: result
-      }
-    });
+  const setValue = (value: any) => {
+    const result = validateValue(value);
+    if (props.validate) {
+      props.setParentState({
+        [props.name]: {
+          ...state,
+          value,
+          validate: result
+        }
+      });
+    } else {
+      props.setParentState({
+        [props.name]: {
+          ...state,
+          value
+        }
+      });
+    }
 
     // TODO: showErr
     if (!result.isPass && result.showErr === false) {
@@ -150,13 +135,13 @@ export const FormItem = (props: FormItemProps) => {
       [props.name]: {
         defaultValue: props.value,
         value: props.value,
-        validate: {
-          isPass: true,
-          msg: ''
-        },
+        validate: props.validate
+          ? validateValue(props.value)
+          : { isPass: true, msg: '' },
         mount: true,
         getValue,
-        setValue
+        setValue,
+        validateValue
       }
     });
   });
@@ -167,9 +152,12 @@ export const FormItem = (props: FormItemProps) => {
         [props.name]: {
           defaultValue: props.value,
           value: props.value,
-          validate: validateValue(props.value),
+          validate: props.validate
+            ? validateValue(props.value)
+            : { isPass: true, msg: '' },
           getValue,
-          setValue
+          setValue,
+          validateValue
         }
       });
     }
@@ -181,13 +169,7 @@ export const FormItem = (props: FormItemProps) => {
     if (type === 'text') {
       return <FormItemText {...props} />;
     } else if (type === 'input') {
-      return (
-        <FormItemInput
-          {...props}
-          setValue={setValue}
-          // setFormContextValue={state.setValue}
-        />
-      );
+      return <FormItemInput {...props} setValue={setValue} />;
     }
   };
   const render = () => {
