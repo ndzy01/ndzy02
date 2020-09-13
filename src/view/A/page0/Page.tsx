@@ -4,14 +4,19 @@ import { useMount, useSetState } from 'ahooks';
 import { Input } from 'antd';
 import { FormRef } from '@/component/form2/types';
 import { Form as Form2 } from '@/component/form2';
+import { useCreation } from 'ahooks';
 
 interface Props extends RouteChildrenProps {
   setBreadcrumb: (data: { path?: string; name: string }[] | string) => void;
   setAuth: (authInfo: any) => void;
 }
+const Foo = () => {
+  return <div>{Math.random()}</div>;
+};
 
 // 函数模板页面
 export const PageA0 = (props: Props) => {
+  const foo = useCreation(() => Foo(), []);
   const [state, setState] = useSetState({
     value: '',
     value1: '',
@@ -38,6 +43,8 @@ export const PageA0 = (props: Props) => {
 
   return (
     <div className="Page">
+      {foo}
+      {console.log('111')}
       <span className="text-green-500 text-4xl ">函数模板页面</span>
       <br />
       <button

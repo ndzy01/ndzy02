@@ -122,7 +122,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
 
   return (
     <FormContext.Provider value={state}>
-      <div className={`custom-form ${props.formClassName}`}>
+      <div ref={ref} className={`custom-form ${props.formClassName}`}>
         {props.formConfig.map((item) => {
           if (item.hidden) {
             return null;
