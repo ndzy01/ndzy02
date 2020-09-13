@@ -63,7 +63,10 @@ export interface FormConfig {
   hidden?: boolean; // all
   validate?: boolean; // all
   onChange?: (value: any) => void; //all
-
+  customizeValidate?: {
+    isPass: boolean;
+    msg: string;
+  }; //all
   // ----------------
   textType?: {
     render?: (name: string) => JSX.Element | JSX.Element[] | null;

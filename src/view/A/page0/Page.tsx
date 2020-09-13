@@ -102,7 +102,12 @@ export const PageA0 = (props: Props) => {
             label: state.isPass === 'Y' ? 'abc' : 'BBB',
             type: 'input',
             value: state.value1,
-            validate: true,
+            validate: false,
+            customizeValidate: {
+              // 自定义校验
+              isPass: state.value1 !== '22',
+              msg: '1111'
+            },
             onChange: (value) => {
               // 使用方式 配合内部状态 实现 属性的自由配置
               if (value === '22') {

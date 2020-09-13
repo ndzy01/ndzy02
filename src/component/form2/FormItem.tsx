@@ -8,9 +8,11 @@ import { FormItemValidateErrorMsg } from './FormItemValidateErrorMsg';
 import { FormItemText } from './FormItemText';
 import { FormItemInput } from './FormItemInput';
 import * as _ from 'lodash';
+import { getIsValidate } from './utils';
 
 export const FormItem = (props: FormItemProps) => {
   const { [props.name]: state } = useContext(FormContext);
+  const isValidate = getIsValidate(props.customizeValidate, props.validate);
 
   //#region getWidth 计算表单label和input的宽度
   /**
@@ -87,6 +89,7 @@ export const FormItem = (props: FormItemProps) => {
       showErr
     };
   };
+  const validateItem = () => props.customizeValidate;
   //#endregion
 
   //#region getValue 获取数据 setValue 设置数据
@@ -103,22 +106,31 @@ export const FormItem = (props: FormItemProps) => {
    */
   const setValue = (value: any) => {
     const result = validateValue(value);
-    const isValidate = props.validate === false ? false : true;
-    if (isValidate) {
+    if (typeof isValidate === 'object') {
       props.setParentState({
         [props.name]: {
           ...state,
           value,
-          validate: result
+          validate: validateItem()
         }
       });
-    } else {
-      props.setParentState({
-        [props.name]: {
-          ...state,
-          value
-        }
-      });
+    } else if (typeof isValidate === 'boolean') {
+      if (isValidate) {
+        props.setParentState({
+          [props.name]: {
+            ...state,
+            value,
+            validate: result
+          }
+        });
+      } else {
+        props.setParentState({
+          [props.name]: {
+            ...state,
+            value
+          }
+        });
+      }
     }
 
     // TODO: showErr
@@ -132,20 +144,48 @@ export const FormItem = (props: FormItemProps) => {
 
   //#region 生命周期
   const setState = () => {
-    props.setParentState({
-      [props.name]: {
-        ...state,
-        defaultValue: props.value,
-        value: props.value,
-        validate: props.validate
-          ? validateValue(props.value)
-          : { isPass: true, msg: '' },
-        mount: true,
-        getValue,
-        setValue,
-        validateValue
+    if (typeof isValidate === 'object') {
+      props.setParentState({
+        [props.name]: {
+          ...state,
+          defaultValue: props.value,
+          value: props.value,
+          validate: validateItem(),
+          mount: true,
+          getValue,
+          setValue,
+          validateValue
+        }
+      });
+    } else if (typeof isValidate === 'boolean') {
+      if (isValidate) {
+        props.setParentState({
+          [props.name]: {
+            ...state,
+            defaultValue: props.value,
+            value: props.value,
+            validate: validateValue(props.value),
+            mount: true,
+            getValue,
+            setValue,
+            validateValue
+          }
+        });
+      } else {
+        props.setParentState({
+          [props.name]: {
+            ...state,
+            defaultValue: props.value,
+            value: props.value,
+            validate: { isPass: true, msg: '' },
+            mount: true,
+            getValue,
+            setValue,
+            validateValue
+          }
+        });
       }
-    });
+    }
   };
   useMount(() => {
     setState();
