@@ -10,11 +10,13 @@ export interface FormContextItem {
     msg: string;
   };
   mount?: boolean;
+  hidden: boolean;
   getValue?: () => any;
   setValue?: (value: any) => void;
   validateValue?: (
     value: any
   ) => { isPass: boolean; msg: string; showErr?: boolean };
+  validateItem?: () => { isPass: boolean; msg: string };
 }
 
 interface Option {
@@ -61,6 +63,11 @@ export interface FormConfig {
   labelShould?: boolean; // all
   hidden?: boolean; // all
   validate?: boolean; // all
+  onChange?: (value: any) => void; //all
+  customizeValidate?: {
+    isPass: boolean;
+    msg: string;
+  }; //all
   // ----------------
   textType?: {
     render?: (name: string) => JSX.Element | JSX.Element[] | null;
@@ -69,13 +76,11 @@ export interface FormConfig {
     maxLen?: number;
     placeholder?: string;
   };
-
   selectOptions?: Option[];
   checkOptions?: Option[] | string[];
   radioOptions?: Option[];
   suffix?: string | JSX.Element;
   addonAfter?: string | JSX.Element;
-  // render?: (name: string) => JSX.Element | JSX.Element[] | null;
   autoSize?:
     | boolean
     | {
@@ -84,7 +89,6 @@ export interface FormConfig {
       };
   // treeData?: TreeNode[];
   // treeDataTree?: TreeNodeNormal[];
-  onChange?: (value: any) => void;
   mode?: 'multiple' | 'tags' | undefined;
   visibilityToggle?: boolean;
 
