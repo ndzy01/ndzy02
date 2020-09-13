@@ -154,7 +154,8 @@ export const FormItem = (props: FormItemProps) => {
           mount: true,
           getValue,
           setValue,
-          validateValue
+          validateValue,
+          validateItem
         }
       });
     } else if (typeof isValidate === 'boolean') {
@@ -168,7 +169,8 @@ export const FormItem = (props: FormItemProps) => {
             mount: true,
             getValue,
             setValue,
-            validateValue
+            validateValue,
+            validateItem
           }
         });
       } else {
@@ -181,7 +183,8 @@ export const FormItem = (props: FormItemProps) => {
             mount: true,
             getValue,
             setValue,
-            validateValue
+            validateValue,
+            validateItem
           }
         });
       }

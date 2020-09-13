@@ -6,6 +6,7 @@ import { FormProps, FormContextItem } from './types';
 import { useSetState } from 'ahooks';
 import { FormContext } from './context';
 import * as _ from 'lodash';
+import { getIsValidate } from './utils';
 import { AnyObj } from '@/types';
 
 export const Form = forwardRef((props: FormProps, ref: any) => {
@@ -25,14 +26,18 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
 
     _.map(formConfig, (item) => {
       const key = item.name;
-      const { value, validateValue } = state[key];
+      const { value, validateValue, validateItem } = state[key];
+      const isValidate = getIsValidate(item.customizeValidate, item.validate);
       // 隐藏不获取数据 不校验
       if (!item.hidden) {
         if (finalValidate) {
           setState({
             [item.name]: {
               ...state[key],
-              validate: validateValue && validateValue(value)
+              validate:
+                typeof isValidate === 'object'
+                  ? validateItem && validateItem()
+                  : validateValue && validateValue(value)
             }
           });
         }
@@ -44,14 +49,21 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     for (let index = 0; index < formConfig.length; index++) {
       const element = formConfig[index];
       const key = element.name;
-      const { value, validateValue } = state[key];
+      const { value, validateValue, validateItem } = state[key];
+      const isValidate = getIsValidate(
+        element.customizeValidate,
+        element.validate
+      );
 
       if (!state[key]) {
         break;
       }
       // 隐藏不获取数据 不校验
       if (!element.hidden) {
-        const validate = validateValue && validateValue(value);
+        const validate =
+          typeof isValidate === 'object'
+            ? validateItem && validateItem()
+            : validateValue && validateValue(value);
         if (validate) {
           isAllPass = validate.isPass;
           if (validate.isPass === false) {

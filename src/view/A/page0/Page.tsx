@@ -89,6 +89,11 @@ export const PageA0 = (props: Props) => {
               )
             },
             validate: false,
+            customizeValidate: {
+              // 自定义校验
+              isPass: state.value !== '22',
+              msg: '1111'
+            },
             rules: [
               {
                 type: 'required',

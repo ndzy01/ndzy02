@@ -16,6 +16,7 @@ export interface FormContextItem {
   validateValue?: (
     value: any
   ) => { isPass: boolean; msg: string; showErr?: boolean };
+  validateItem?: () => { isPass: boolean; msg: string };
 }
 
 interface Option {
@@ -75,13 +76,11 @@ export interface FormConfig {
     maxLen?: number;
     placeholder?: string;
   };
-
   selectOptions?: Option[];
   checkOptions?: Option[] | string[];
   radioOptions?: Option[];
   suffix?: string | JSX.Element;
   addonAfter?: string | JSX.Element;
-  // render?: (name: string) => JSX.Element | JSX.Element[] | null;
   autoSize?:
     | boolean
     | {
