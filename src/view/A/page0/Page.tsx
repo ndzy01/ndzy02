@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
 import { useMount, useSetState } from 'ahooks';
 import { Input } from 'antd';
+import { FormRef } from '@/component/form2/types';
 import { Form as Form2 } from '@/component/form2';
 
 interface Props extends RouteChildrenProps {
@@ -13,19 +14,26 @@ interface Props extends RouteChildrenProps {
 export const PageA0 = (props: Props) => {
   const [state, setState] = useSetState({
     value: '',
-    value1: '11',
+    value1: '',
     isPass: 'N'
   });
-  const ref: any = useRef();
+  const ref: FormRef = useRef({});
   useMount(() => {});
   const getData = () => {
-    console.log(ref.current.getFormData());
+    console.log(ref.current.getFormData && ref.current.getFormData());
   };
   const getData1 = () => {
-    ref.current.clearFormItem('t2');
+    ref.current.setFormItem && ref.current.setFormItem('t2', '111');
   };
   const getData2 = () => {
-    ref.current.handleReset();
+    ref.current.handleReset && ref.current.handleReset();
+  };
+  const getData3 = () => {
+    ref.current.handleReset && ref.current.handleReset();
+
+    setState({
+      value: ''
+    });
   };
 
   return (
@@ -48,6 +56,15 @@ export const PageA0 = (props: Props) => {
         清理
       </button>
       <br />
+
+      <button
+        onClick={() => {
+          getData3();
+        }}
+      >
+        清理所有
+      </button>
+      <br />
       <button
         onClick={() => {
           getData2();
@@ -59,6 +76,7 @@ export const PageA0 = (props: Props) => {
       <Form2
         ref={ref}
         column={3}
+        formClassName={'formClassName'}
         // isShowMessage={true}
         formConfig={[
           {
@@ -67,7 +85,8 @@ export const PageA0 = (props: Props) => {
               itemWrap: 'AA',
               item: 'A',
               itemLabel: 'B',
-              itemInput: 'c'
+              itemInput: 'C',
+              itemInputValidateErr: state.value === '22' ? 'c' : ''
             },
             name: 't1',
             label: state.isPass === 'Y' ? 'AAA' : 'BBB',
@@ -85,15 +104,23 @@ export const PageA0 = (props: Props) => {
                       });
                     }}
                   ></Input>
+                  <Input
+                    value={state.value}
+                    onChange={(e) => {
+                      setState({
+                        value: e.target.value
+                      });
+                    }}
+                  ></Input>
                 </>
               )
             },
-            validate: false,
-            customizeValidate: {
-              // 自定义校验
-              isPass: state.value !== '22',
-              msg: '1111'
-            },
+            validate: true,
+            // customizeValidate: {
+            //   // 自定义校验
+            //   isPass: state.value !== '22',
+            //   msg: '1111'
+            // },
             rules: [
               {
                 type: 'required',
@@ -102,17 +129,18 @@ export const PageA0 = (props: Props) => {
             ],
             hidden: state.isPass === 'Y' ? true : false
           },
+          // ------------------------
           {
             name: 't2',
             label: state.isPass === 'Y' ? 'abc' : 'BBB',
             type: 'input',
             value: state.value1,
-            validate: false,
-            customizeValidate: {
-              // 自定义校验
-              isPass: state.value1 !== '22',
-              msg: '1111'
-            },
+            validate: true,
+            // customizeValidate: {
+            //   // 自定义校验
+            //   isPass: state.value1 !== '22',
+            //   msg: '1111'
+            // },
             onChange: (value) => {
               // 使用方式 配合内部状态 实现 属性的自由配置
               if (value === '22') {

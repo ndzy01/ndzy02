@@ -14,10 +14,10 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     [key: string]: FormContextItem;
   }>();
 
-  //#region getFormData
+  //#region getFormData setFormItem handleReset handleSearch
   /**
    * @description 获取表单数据
-   * @param isValidate
+   * @param finalValidate 默认为 true 默认校验
    */
   const getFormData = (finalValidate: boolean = true): {} | boolean => {
     const data: AnyObj = {};
@@ -82,9 +82,42 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     return data;
   };
 
+  /**
+   * @description 设置表单项数据
+   * @param key
+   */
+  const setFormItem = (key: string, value: any) => {
+    const { setValue } = state[key];
+    setValue && setValue(value, false);
+  };
+
+  /**
+   * @description 重置表单
+   */
+  const handleReset = () => {
+    const data: AnyObj = {};
+    const formConfig = _.cloneDeep(props.formConfig);
+    _.map(formConfig, (item) => {
+      const key = item.name;
+      data[key] = undefined;
+      setFormItem(key, undefined);
+      return item;
+    });
+    return data;
+  };
+
+  /**
+   * @description handleSearch
+   */
+  const handleSearch = () => {
+    const data = getFormData();
+    return data;
+  };
+
   //#endregion
+
   useImperativeHandle(ref, () => {
-    return { getFormData };
+    return { getFormData, setFormItem, handleReset, handleSearch };
   });
 
   return (
