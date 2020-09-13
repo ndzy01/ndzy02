@@ -12,11 +12,21 @@ export interface FormContextItem {
   mount?: boolean;
   hidden: boolean;
   getValue?: () => any;
-  setValue?: (value: any) => void;
+  setValue?: (value: any, validate: boolean) => void;
   validateValue?: (
     value: any
   ) => { isPass: boolean; msg: string; showErr?: boolean };
   validateItem?: () => { isPass: boolean; msg: string };
+}
+export interface FormRef {
+  current: {
+    getFormData?: (finalValidate?: boolean) => {} | boolean;
+    setFormItem?: (key: string, value: any) => void;
+    handleReset?: () => any;
+    handleSearch?: () => any;
+    [key: string]: any;
+  };
+  [key: string]: any;
 }
 
 interface Option {
@@ -54,6 +64,7 @@ export interface FormConfig {
     item?: string;
     itemLabel?: string;
     itemInput?: string;
+    itemInputValidateErr?: string;
     itemRequireSymbol?: string;
     itemValidateErrMsg?: string;
   };
@@ -111,8 +122,6 @@ export interface FormConfig {
   switchData?: { value: any; checked: boolean }[];
   maxHeight?: number;
   maxLength?: number;
-  // // 验证时机
-  // validateValueOnChange?: boolean;
 }
 
 export interface FormProps {
@@ -121,9 +130,8 @@ export interface FormProps {
   formConfig: FormConfig[];
   column?: number | undefined;
   hasBtn?: boolean;
-  isShowMessage?: boolean;
-  onSearch?: (data: {}) => void;
-  onReset?: (data: {}) => void;
+  // onSearch?: (data: {}) => void;
+  // onReset?: (data: {}) => void;
 }
 
 //#endregion

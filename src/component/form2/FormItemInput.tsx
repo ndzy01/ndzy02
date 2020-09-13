@@ -5,7 +5,6 @@ import { FormContext } from './context';
 interface Props extends FormItemProps {
   setValue: (value: any) => void;
 }
-
 export const FormItemInput = (props: Props) => {
   const state = useContext(FormContext);
   const handleInput = (
