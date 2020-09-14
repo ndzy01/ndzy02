@@ -134,12 +134,13 @@ class AxiosPackage {
       });
     }
 
-    // 自定义请求头
-    const userInfo = getSession('history_key');
+    //TODO: 自定义请求头
+    const userInfo = getSession('SYSTEM_KEY');
     let token = '';
 
     if (isArray(userInfo)) {
-      token = userInfo[0].state.loginInfo.token;
+      // TODO: 登录后 设置 token
+      // token = userInfo[0].state.loginInfo.token;
     }
 
     params.headers.authorization = token || '';
