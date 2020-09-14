@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
-import { useMount, useSetState } from 'ahooks';
+import { useMount, useSetState, useUnmount } from 'ahooks';
 import { Input } from 'antd';
 import { FormRef } from '@/component/form2/types';
 import { Form as Form2 } from '@/component/form2';
 import { useCreation } from 'ahooks';
+import NProgress from 'nprogress';
 
 interface Props extends RouteChildrenProps {
   setBreadcrumb: (data: { path?: string; name: string }[] | string) => void;
@@ -23,7 +24,12 @@ export const PageA0 = (props: Props) => {
     isPass: 'N'
   });
   const ref: FormRef = useRef({});
-  useMount(() => {});
+  useMount(() => {
+    NProgress.start();
+  });
+  useUnmount(() => {
+    NProgress.done();
+  });
   const getData = () => {
     console.log(ref.current.getFormData && ref.current.getFormData());
   };
