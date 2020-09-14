@@ -184,8 +184,7 @@ class AxiosPackage {
             resolve(res.data);
             return;
           }
-
-          let resCode = res.data.status;
+          const resCode = String(res.data.status);
 
           // 正常状态，返回数据
           if (resCode === '0') {

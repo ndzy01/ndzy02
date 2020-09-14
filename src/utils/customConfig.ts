@@ -1,3 +1,3 @@
 export const customConfig = {
-  baseURL: ''
+  baseURL: 'http://localhost:5656/'
 };
