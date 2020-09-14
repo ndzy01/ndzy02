@@ -1,0 +1,1 @@
+export { PageA } from './Page';
