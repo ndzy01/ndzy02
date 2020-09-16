@@ -9,9 +9,10 @@ interface FormContextItem {
     msg: string;
   };
   getValue?: () => any;
-  setValue?: (value: any, validate: boolean) => void;
+  setValue?: (value: any) => void;
   validateValue?: (
-    value: any
+    value: any,
+    rules?: Rule[]
   ) => { isPass: boolean; msg: string; showErr?: boolean };
 }
 

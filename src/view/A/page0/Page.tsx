@@ -94,7 +94,7 @@ export const PageA0 = (props: Props) => {
           {
             column: 2,
             formItemStyle: {
-              itemInput: { width: '100%' }
+              itemInput: { width: '50%' }
             },
             formItemClassName: {
               itemWrap: 'AA',

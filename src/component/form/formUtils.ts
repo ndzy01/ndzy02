@@ -1,3 +1,4 @@
+import { rules as rules_ } from '@/component/form';
 export const getWidth = (
   props: FormItemProps
 ): {
@@ -37,4 +38,37 @@ export const getWidth = (
     }
   };
   return itemWidth;
+};
+
+export const validateValue = (
+  value: any,
+  rules?: Rule[]
+): { isPass: boolean; msg: string; showErr?: boolean } => {
+  let isPass = true;
+  let msg = '';
+  let showErr = true;
+  if (rules) {
+    for (let i = 0; i < rules.length; i++) {
+      const item = rules[i];
+      const rule = rules_[item.type];
+      showErr = item.showErr === false ? false : true;
+
+      // 内置 校验方式
+      if (rule) {
+        isPass = rule.reg.test(value || '');
+        msg = item.msg || rule.msg;
+      }
+      // 其他 校验方式
+
+      // 验证失败，不再验证其它的规则
+      if (!isPass) {
+        break;
+      }
+    }
+  }
+  return {
+    isPass,
+    msg,
+    showErr
+  };
 };
