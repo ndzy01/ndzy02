@@ -1,7 +1,8 @@
-import { AnyObj } from '@/types';
-
+interface AnyObj {
+  [key: string]: any;
+}
 // FormContextItem
-export interface FormContextItem {
+interface FormContextItem {
   value?: any;
   validate?: {
     isPass: boolean;
@@ -15,13 +16,13 @@ export interface FormContextItem {
 }
 
 // FormItemType
-export type FormItemType = 'text' | 'input';
+type FormItemType = 'text' | 'input';
 
 // RuleType
-export type RuleType = 'required';
+type RuleType = 'required';
 
 // Rule
-export interface Rule {
+interface Rule {
   type: RuleType;
   name?: string;
   msg?: string;
@@ -30,18 +31,16 @@ export interface Rule {
 }
 
 // FormConfig
-export interface FormConfig {
+interface FormConfig {
   name: string; // 唯一标识 all
   type: FormItemType; // item 类型 all
   column?: number; //可单独配置所占宽度 all
   // all
   formItemStyle?: {
-    labelWidth: string;
-    inputWidth: string;
     itemWrap?: AnyObj;
     item?: AnyObj;
-    itemLabel?: AnyObj;
-    itemInput?: AnyObj;
+    itemLabel?: AnyObj; // width 默认 30%
+    itemInput?: AnyObj; // width 默认 70%
     itemInputValidate?: AnyObj;
     itemRequireSymbol?: AnyObj;
     itemValidateMsg?: AnyObj;
@@ -63,7 +62,6 @@ export interface FormConfig {
   rules?: Rule[]; // all
   labelShould?: boolean; // all
   hidden?: boolean; // all
-  validate?: boolean; // all
   onChange?: (value: any) => void; //all
   // ----------------
   textType?: {
@@ -109,7 +107,7 @@ export interface FormConfig {
   // maxLength?: number;
 }
 //
-export interface FormProps {
+interface FormProps {
   column?: number;
   formClassName?: string;
   formStyles?: AnyObj;
@@ -120,9 +118,9 @@ export interface FormProps {
 }
 
 //#endregion
-export interface FormItemProps extends FormConfig {
+interface FormItemProps extends FormConfig {
   setParentState: (value: AnyObj) => void;
-  parentColumn: number;
+  parentColumn: number; // form 的 Column
   formState: { [key: string]: FormContextItem };
   [key: string]: any;
 }

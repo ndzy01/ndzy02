@@ -1,10 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
-import { FormContext } from './FormContext';
-import {
-  FormContextItem,
-  FormProps,
-  FormConfig
-} from '@/component/form/formTypes';
+import '@/component/form/Form.scss';
+import { FormContext, FormItem } from '@/component/form';
+
 import { useSetState, useMount, useUpdateEffect } from 'ahooks';
 import { AnyObj } from '@/types';
 
@@ -63,18 +60,18 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
           return (
             <div
               style={{ ...styleObj, ...(item?.formItemStyle?.itemWrap ?? {}) }}
-              className={`custom-form-item-wrap ${
+              className={`custom-form-wrap ${
                 item?.formItemClassName?.itemWrap ?? ''
               }`}
               key={item.name}
             >
-              {/* <FormItem
-                setParentState={setState}
+              <FormItem
                 key={item.name}
-                parentColumn={props.column || 1}
-                refOther={state}
+                setParentState={setFormItems}
+                parentColumn={state?.column ?? 1}
+                formState={formItems}
                 {...item}
-              /> */}
+              />
             </div>
           );
         }) ?? null}
