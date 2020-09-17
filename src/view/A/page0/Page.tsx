@@ -32,16 +32,16 @@ export const PageA0 = (props: Props) => {
     NProgress.done();
   });
   const getData = () => {
-    console.log(ref.current.getFormData && ref.current.getFormData());
+    // console.log(ref.current.getFormData && ref.current.getFormData());
   };
   const getData1 = () => {
-    ref.current.setFormItem && ref.current.setFormItem('t2', '111');
+    // ref.current.setFormItem && ref.current.setFormItem('t2', '111');
   };
   const getData2 = () => {
-    ref.current.handleReset && ref.current.handleReset();
+    // ref.current.handleReset && ref.current.handleReset();
   };
   const getData3 = () => {
-    ref.current.handleReset && ref.current.handleReset();
+    // ref.current.handleReset && ref.current.handleReset();
 
     setState({
       value: ''
@@ -51,7 +51,6 @@ export const PageA0 = (props: Props) => {
   return (
     <div className="Page">
       {foo}
-      {console.log('111')}
       <span className="text-green-500 text-4xl ">函数模板页面</span>
       <br />
       <button
@@ -176,7 +175,20 @@ export const PageA0 = (props: Props) => {
                 ? [
                     {
                       type: 'required',
-                      showErr: true
+                      showErr: true,
+                      validate: (value: any) => {
+                        if (value > 10) {
+                          return {
+                            isPass: false,
+                            msg: '111111111111111111'
+                          };
+                        }
+
+                        return {
+                          isPass: true,
+                          msg: ''
+                        };
+                      }
                     }
                   ]
                 : []

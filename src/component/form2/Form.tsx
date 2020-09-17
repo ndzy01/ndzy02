@@ -7,7 +7,6 @@ import { useSetState } from 'ahooks';
 import { FormContext } from './context';
 import * as _ from 'lodash';
 import { getIsValidate } from './utils';
-import { AnyObj } from '@/types';
 
 export const Form = forwardRef((props: FormProps, ref: any) => {
   const [state, setState] = useSetState<{
@@ -153,8 +152,6 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
           );
         })}
       </div>
-    
-    
     </FormContext.Provider>
   );
 });

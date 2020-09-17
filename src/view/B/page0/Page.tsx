@@ -1,6 +1,5 @@
 import React, { Component, createRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
-import { InitState, InitProps } from '@/types';
 import { FormRef } from '@/component/form2/types';
 import { Form as Form2 } from '@/component/form2';
 

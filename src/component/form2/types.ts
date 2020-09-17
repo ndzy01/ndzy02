@@ -1,6 +1,5 @@
 import { Moment } from 'moment';
 import { TimePickerProps } from 'antd/lib/time-picker';
-import { AnyObj } from '@/types';
 
 export interface FormContextItem {
   defaultValue?: string;

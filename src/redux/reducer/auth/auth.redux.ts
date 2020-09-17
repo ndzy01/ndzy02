@@ -1,6 +1,5 @@
 import { createActions, handleActions } from 'redux-actions';
 import { SET_AUTH, CLEAR_AUTH } from '@/redux/actionTypes';
-import { AnyObj } from '@/types';
 
 const auth: AnyObj[] = [];
 

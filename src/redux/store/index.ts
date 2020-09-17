@@ -18,7 +18,6 @@ import { cacheData } from '@/redux/middleware/cacheData';
 //
 import { getSession } from '@/utils';
 import { SYSTEM_KEY, IS_REDUX_LOG } from '@/constant';
-import { AnyObj } from '@/types';
 
 export interface MyStore extends Store {
   auth: AnyObj[];

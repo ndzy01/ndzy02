@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
-import { InitState, InitProps } from '@/types';
 
 interface Props extends RouteChildrenProps, InitProps {
   setBreadcrumb: (data: { path?: string; name: string }[] | string) => void;

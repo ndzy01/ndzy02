@@ -58,6 +58,10 @@ export const validateValue = (
         isPass = rule.reg.test(value || '');
         msg = item.msg || rule.msg;
       }
+      if (item.validate) {
+        isPass = item.validate(value).isPass;
+        msg = item.validate(value).msg;
+      }
       // 其他 校验方式
 
       // 验证失败，不再验证其它的规则

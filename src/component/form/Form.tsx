@@ -1,9 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import '@/component/form/Form.scss';
 import { FormContext, FormItem } from '@/component/form';
-
 import { useSetState, useMount, useUpdateEffect } from 'ahooks';
-import { AnyObj } from '@/types';
 
 export const Form = forwardRef((props: FormProps, ref: any) => {
   const [formItems, setFormItems] = useSetState<{
