@@ -3,7 +3,7 @@ import { RouteChildrenProps } from 'react-router-dom';
 import { useMount, useSetState, useUnmount } from 'ahooks';
 import { Input } from 'antd';
 import { FormRef } from '@/component/form2/types';
-import { Form as Form2 } from '@/component/form2';
+// import { Form as Form2 } from '@/component/form2';
 import { Form } from '@/component/form';
 import { useCreation } from 'ahooks';
 import NProgress from 'nprogress';
@@ -32,15 +32,19 @@ export const PageA0 = (props: Props) => {
     NProgress.done();
   });
   const getData = () => {
-    // console.log(ref.current.getFormData && ref.current.getFormData());
+    console.log(ref.current.getFormData && ref.current.getFormData());
   };
   const getData1 = () => {
-    // ref.current.setFormItem && ref.current.setFormItem('t2', '111');
+    console.log(
+      ref.current.getFormItemData && ref.current.getFormItemData('t3', false)
+    );
   };
   const getData2 = () => {
-    // ref.current.handleReset && ref.current.handleReset();
+    ref.current.setFormItemData && ref.current.setFormItemData('t3', '222');
   };
   const getData3 = () => {
+    ref.current.setFormItemData && ref.current.setFormItemData('t3', '222');
+
     // ref.current.handleReset && ref.current.handleReset();
 
     setState({
@@ -66,7 +70,7 @@ export const PageA0 = (props: Props) => {
           getData1();
         }}
       >
-        清理
+        获取数据项
       </button>
       <br />
 
@@ -75,7 +79,7 @@ export const PageA0 = (props: Props) => {
           getData3();
         }}
       >
-        清理所有
+        设置数据
       </button>
       <br />
       <button
@@ -87,6 +91,7 @@ export const PageA0 = (props: Props) => {
       </button>
       {/* {console.log(state)} */}
       <Form
+        ref={ref}
         column={3}
         formClassName={'formClassName'}
         formConfig={[
@@ -195,7 +200,7 @@ export const PageA0 = (props: Props) => {
           }
         ]}
       ></Form>
-      <Form2
+      {/* <Form2
         ref={ref}
         column={3}
         formClassName={'formClassName'}
@@ -292,6 +297,7 @@ export const PageA0 = (props: Props) => {
           }
         ]}
       ></Form2>
+    */}
     </div>
   );
 };

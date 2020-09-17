@@ -14,12 +14,8 @@ interface FormContextItem {
     isPass: boolean;
     msg: string;
   };
-  getValue?: () => any;
+  validateValue: (value: any) => void;
   setValue?: (value: any) => void;
-  validateValue?: (
-    value: any,
-    rules?: Rule[]
-  ) => { isPass: boolean; msg: string; showErr?: boolean };
 }
 
 // FormItemType

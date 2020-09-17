@@ -40,7 +40,7 @@ export const getWidth = (
   return itemWidth;
 };
 
-export const validateValue = (
+export const customValidateValue = (
   value: any,
   rules?: Rule[]
 ): { isPass: boolean; msg: string; showErr?: boolean } => {

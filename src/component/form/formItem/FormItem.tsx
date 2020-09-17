@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import {
   FormContext,
   getWidth,
-  validateValue,
+  customValidateValue,
   FormItemRequireSymbol,
   FormItemValidateMsg,
   FormItemText,
@@ -11,11 +11,28 @@ import {
 import { useMount, useUpdateEffect } from 'ahooks';
 export const FormItem = (props: FormItemProps) => {
   const { [props.name]: state } = useContext(FormContext);
-  const getValue = (): any => {
-    return state.value;
+  const validateValue = (value: any): void => {
+    const result = customValidateValue(value, props.rules);
+    if (result.isPass) {
+      props.setParentState({
+        [props.name]: {
+          ...state,
+          value,
+          validate: { isPass: true, msg: '' }
+        }
+      });
+    } else {
+      props.setParentState({
+        [props.name]: {
+          ...state,
+          value,
+          validate: result
+        }
+      });
+    }
   };
   const setValue = (value: any): void => {
-    const result = validateValue(value, props.rules);
+    const result = customValidateValue(value, props.rules);
     if (result.isPass) {
       props.setParentState({
         [props.name]: {
@@ -46,7 +63,6 @@ export const FormItem = (props: FormItemProps) => {
         ...state,
         value: props.value,
         validate: { isPass: true, msg: '' },
-        getValue,
         setValue,
         validateValue
       }
@@ -57,9 +73,8 @@ export const FormItem = (props: FormItemProps) => {
       [props.name]: {
         ...state,
         value: props.value,
-        validate: validateValue(props.value, props.rules),
+        validate: customValidateValue(props.value, props.rules),
         mount: true,
-        getValue,
         setValue,
         validateValue
       }
