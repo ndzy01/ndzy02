@@ -1,0 +1,30 @@
+.custom-form {
+  width: 100%;
+  &-wrap {
+    display: inline-block;
+    vertical-align: top;
+    &-item {
+      width: 100%;
+      padding: 6px 0;
+      > span {
+        display: inline-block;
+        min-height: 32px;
+        vertical-align: top;
+        line-height: 32px;
+        overflow: hidden;
+      }
+      &-label {
+        width: 30%;
+        text-align: right;
+        color: #5a5f64;
+      }
+      &-input {
+        width: 70%;
+      }
+      &-require-symbol {
+        color: #d0021b;
+        margin-right: 2px;
+      }
+    }
+  }
+}

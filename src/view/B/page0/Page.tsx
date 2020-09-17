@@ -10,6 +10,7 @@ interface Props extends RouteChildrenProps, InitProps {
 }
 interface State extends InitState {
   [propName: string]: any;
+  validate: boolean;
 }
 
 // class 模板页面
@@ -17,7 +18,7 @@ export class PageB0 extends Component<Props, State> {
   formRef: FormRef;
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = { validate: true };
     this.formRef = createRef<any>();
   }
 
@@ -26,7 +27,7 @@ export class PageB0 extends Component<Props, State> {
   }
 
   render() {
-    console.log(this.formRef);
+    const { validate } = this.state;
     return (
       <div className="Page">
         <span className="text-green-500 text-4xl ">class模板页面</span>
@@ -61,17 +62,24 @@ export class PageB0 extends Component<Props, State> {
               //   msg: '1111'
               // },
               onChange: (value) => {
+                if (value) {
+                  this.setState({ validate: false });
+                } else {
+                  this.setState({ validate: true });
+                }
                 // 使用方式 配合内部状态 实现 属性的自由配置
                 // 获取 当前的数据
                 // console.log(ref.current.getFormData());
                 // console.log(ref.current.getFormData(false));
               },
-              rules: [
-                {
-                  type: 'required',
-                  showErr: true
-                }
-              ]
+              rules: validate
+                ? [
+                    {
+                      type: 'required',
+                      showErr: true
+                    }
+                  ]
+                : []
             }
           ]}
         ></Form2>

@@ -154,7 +154,8 @@ export const FormItem = (props: FormItemProps) => {
       });
     }
 
-    // TODO: showErr
+    // TODO: 应用场景
+    //TODO: 设置了showErr 为 false 代表不能输入 不通过校验的值
     if (!result.isPass && result.showErr === false) {
       return;
     }

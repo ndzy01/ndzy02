@@ -1,12 +1,14 @@
+import { PageA } from '@/view/A/page';
 import { PageA0 } from '@/view/A/page0';
 import { PageA1 } from '@/view/A/page1';
 
+import { PageB } from '@/view/B/page';
 import { PageB0 } from '@/view/B/page0';
 
 import Login from '@/view/login/Login';
 
 import { ErrorPage } from '@/view/404/ErrorPage';
-
+// 函数模板页面
 const appConfig = {
   '404': true,
   menu: [
@@ -17,14 +19,19 @@ const appConfig = {
       icon: 'icon-gongdan',
       subMenu: [
         {
+          key: '/A/page',
+          auth: '',
+          title: '函数模板页面'
+        },
+        {
           key: '/A/page0',
           auth: '张一',
-          title: 'page0'
+          title: 'form 组件'
         },
         {
           key: '/A/page1',
           auth: '张一',
-          title: 'page1'
+          title: 'ahooks'
         }
       ]
     },
@@ -35,9 +42,14 @@ const appConfig = {
       icon: 'appstore',
       subMenu: [
         {
+          key: '/B/page',
+          auth: '',
+          title: 'class 模板页面'
+        },
+        {
           key: '/B/page0',
           auth: '',
-          title: 'page0'
+          title: 'class 模板'
         }
       ]
     }
@@ -52,11 +64,19 @@ const appConfig = {
 
 const menuRouter = [
   {
+    path: '/A/page',
+    auth: '',
+    component: PageA,
+    parent: '/A',
+    title: '函数模板页面',
+    hidden: false
+  },
+  {
     path: '/A/page0',
     auth: '',
     component: PageA0,
     parent: '/A',
-    title: 'page0',
+    title: 'form 组件',
     hidden: false
   },
   {
@@ -64,10 +84,17 @@ const menuRouter = [
     auth: '',
     component: PageA1,
     parent: '/A',
-    title: 'page1',
+    title: 'ahooks',
     hidden: false
   },
-
+  {
+    path: '/B/page',
+    auth: '',
+    component: PageB,
+    parent: '/B',
+    title: 'class 模板页面',
+    hidden: false
+  },
   {
     path: '/B/page0',
     auth: '',
