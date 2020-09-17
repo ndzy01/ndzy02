@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   FormContext,
   getWidth,
@@ -11,6 +11,7 @@ import {
 import { useMount, useUpdateEffect } from 'ahooks';
 export const FormItem = (props: FormItemProps) => {
   const { [props.name]: state } = useContext(FormContext);
+  const [isValidate, setIsValidate] = useState(true);
   const validateValue = (value: any): void => {
     const result = customValidateValue(value, props.rules);
     if (result.isPass) {
@@ -31,9 +32,33 @@ export const FormItem = (props: FormItemProps) => {
       });
     }
   };
-  const setValue = (value: any): void => {
-    const result = customValidateValue(value, props.rules);
-    if (result.isPass) {
+  const setValue = (value: any, validate: boolean = true): void => {
+    setIsValidate(validate);
+    if (validate) {
+      const result = customValidateValue(value, props.rules);
+      if (result.isPass) {
+        props.setParentState({
+          [props.name]: {
+            ...state,
+            value,
+            validate: { isPass: true, msg: '' }
+          }
+        });
+      } else {
+        props.setParentState({
+          [props.name]: {
+            ...state,
+            value,
+            validate: result
+          }
+        });
+      }
+      // 应用场景
+      // 设置了showErr 为 false 不能输入 不通过校验的值
+      if (!result.isPass && result.showErr === false) {
+        return;
+      }
+    } else {
       props.setParentState({
         [props.name]: {
           ...state,
@@ -41,20 +66,8 @@ export const FormItem = (props: FormItemProps) => {
           validate: { isPass: true, msg: '' }
         }
       });
-    } else {
-      props.setParentState({
-        [props.name]: {
-          ...state,
-          value,
-          validate: result
-        }
-      });
     }
-    // 应用场景
-    // 设置了showErr 为 false 不能输入 不通过校验的值
-    if (!result.isPass && result.showErr === false) {
-      return;
-    }
+
     props.onChange && props.onChange(value);
   };
   useMount(() => {
@@ -69,16 +82,29 @@ export const FormItem = (props: FormItemProps) => {
     });
   });
   useUpdateEffect(() => {
-    props.setParentState({
-      [props.name]: {
-        ...state,
-        value: props.value,
-        validate: customValidateValue(props.value, props.rules),
-        mount: true,
-        setValue,
-        validateValue
-      }
-    });
+    if (isValidate) {
+      props.setParentState({
+        [props.name]: {
+          ...state,
+          value: props.value,
+          validate: customValidateValue(props.value, props.rules),
+          mount: true,
+          setValue,
+          validateValue
+        }
+      });
+    } else {
+      props.setParentState({
+        [props.name]: {
+          ...state,
+          value: props.value,
+          validate: { isPass: true, msg: '' },
+          mount: true,
+          setValue,
+          validateValue
+        }
+      });
+    }
   }, [props.value]);
   const renderFormItem = (type: FormItemType, props: FormItemProps) => {
     if (type === 'text') {

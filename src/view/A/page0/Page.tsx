@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
 import { useMount, useSetState, useUnmount } from 'ahooks';
 import { Input } from 'antd';
-import { FormRef } from '@/component/form2/types';
+// import { FormRef } from '@/component/form2/types';
 // import { Form as Form2 } from '@/component/form2';
 import { Form } from '@/component/form';
 import { useCreation } from 'ahooks';
@@ -12,6 +12,7 @@ interface Props extends RouteChildrenProps {
   setBreadcrumb: (data: { path?: string; name: string }[] | string) => void;
   setAuth: (authInfo: any) => void;
 }
+
 const Foo = () => {
   return <div>{Math.random()}</div>;
 };
@@ -27,10 +28,11 @@ export const PageA0 = (props: Props) => {
   const ref: FormRef = useRef({});
   useMount(() => {
     NProgress.start();
+    setTimeout(() => {
+      NProgress.done();
+    }, 2000);
   });
-  useUnmount(() => {
-    NProgress.done();
-  });
+  useUnmount(() => {});
   const getData = () => {
     console.log(ref.current.getFormData && ref.current.getFormData());
   };
@@ -40,16 +42,15 @@ export const PageA0 = (props: Props) => {
     );
   };
   const getData2 = () => {
-    ref.current.setFormItemData && ref.current.setFormItemData('t3', '222');
+    ref.current.clearFormItems && ref.current.clearFormItems();
+    setState({
+      value: undefined
+    });
   };
   const getData3 = () => {
-    ref.current.setFormItemData && ref.current.setFormItemData('t3', '222');
+    ref.current.setFormItemData && ref.current.setFormItemData('t3', undefined);
 
     // ref.current.handleReset && ref.current.handleReset();
-
-    setState({
-      value: ''
-    });
   };
 
   return (

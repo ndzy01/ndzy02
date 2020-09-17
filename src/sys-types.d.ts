@@ -15,7 +15,7 @@ interface FormContextItem {
     msg: string;
   };
   validateValue: (value: any) => void;
-  setValue?: (value: any) => void;
+  setValue?: (value: any, validate?: boolean) => void;
 }
 
 // FormItemType
@@ -125,6 +125,22 @@ interface FormItemProps extends FormConfig {
   setParentState: (value: AnyObj) => void;
   parentColumn: number; // form 的 Column
   formState: { [key: string]: FormContextItem };
+  [key: string]: any;
+}
+interface FormRef {
+  current: {
+    getFormData?: (validate?: boolean) => {} | boolean;
+    getFormItemData?: (key: string, validate: boolean = true) => {} | boolean;
+    setFormItemData?: (
+      key: string,
+      value: any,
+      validate: boolean = false
+    ) => void;
+    clearFormItems?: () => void;
+    // handleReset?: () => any;
+    // handleSearch?: () => any;
+    [key: string]: any;
+  };
   [key: string]: any;
 }
 // end form

@@ -67,7 +67,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
   };
   const getFormItemData = (
     key: string,
-    validate: boolean = true
+    validate: boolean = false
   ): {} | boolean => {
     const data: AnyObj = {};
     if (!formItems[key]) {
@@ -80,11 +80,27 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     }
     return data;
   };
-  const setFormItemData = (key: string, value: any) => {
+  const setFormItemData = (
+    key: string,
+    value: any,
+    validate: boolean = false
+  ) => {
     if (formItems[key]) {
       const { setValue } = formItems[key];
-      setValue && setValue(value);
+      setValue && setValue(value, validate);
     }
+  };
+  const clearFormItems = () => {
+    const formConfig = _.cloneDeep(props.formConfig);
+    _.map(formConfig, (item) => {
+      const key = item.name;
+      if (formItems[key]) {
+        const { setValue } = formItems[key];
+        setValue && setValue(undefined, false);
+      }
+
+      return item;
+    });
   };
 
   useMount(() => {
@@ -104,7 +120,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     });
   }, [props]);
   useImperativeHandle(ref, () => {
-    return { getFormData, getFormItemData, setFormItemData };
+    return { getFormData, getFormItemData, setFormItemData, clearFormItems };
   });
   return (
     <FormContext.Provider value={formItems}>
