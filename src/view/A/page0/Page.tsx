@@ -145,7 +145,7 @@ export const PageA0 = (props: Props) => {
           },
           // ------------------------
           {
-            name: 't2',
+            name: 't3',
             label: state.isPass === 'Y' ? 'abc' : 'BBB',
             type: 'input',
             value: state.value1,
