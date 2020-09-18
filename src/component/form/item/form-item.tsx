@@ -8,6 +8,7 @@ import {
   FormItemText,
   FormItemInput
 } from '@/component/form';
+import { FormItemProps, FormItemType } from '@/component/form/form-types';
 import { useMount, useUpdateEffect } from 'ahooks';
 export const FormItem = (props: FormItemProps) => {
   const { [props.name]: state } = useContext(FormContext);

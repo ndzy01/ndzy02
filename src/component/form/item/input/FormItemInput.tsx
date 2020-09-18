@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 
 import { Input } from 'antd';
 import { FormContext } from '@/component/form';
+import { FormItemProps } from '@/component/form/form-types';
 interface Props extends FormItemProps {
   setValue: (value: any) => void;
 }
@@ -16,14 +17,14 @@ export const FormItemInput = (props: Props) => {
   return (
     <Input
       autoComplete="off"
-      placeholder={props.placeholder}
-      suffix={props.suffix}
-      addonAfter={props.addonAfter}
+      placeholder={props?.inputType?.placeholder}
+      suffix={props?.inputType?.suffix}
+      addonAfter={props?.inputType?.addonAfter}
+      disabled={props?.inputType?.disabled}
       value={state[props.name]?.value}
       onChange={(e) => {
         handleInput(e);
       }}
-      disabled={props.disabled}
     />
   );
 };

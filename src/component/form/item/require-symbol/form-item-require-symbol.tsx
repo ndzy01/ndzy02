@@ -1,4 +1,5 @@
 import React from 'react';
+import { Rule } from '@/component/form/form-types';
 interface Props {
   rules?: Rule[];
   styles?: AnyObj;

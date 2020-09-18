@@ -1,6 +1,7 @@
 import { useContext } from 'react';
-
 import { FormContext } from '@/component/form';
+import { FormItemProps } from '@/component/form/form-types';
+
 
 export const FormItemText = (props: FormItemProps) => {
   const state = useContext(FormContext);

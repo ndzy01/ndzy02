@@ -1,5 +1,10 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
 import '@/component/form/Form.scss';
+import {
+  FormProps,
+  FormContextItem,
+  FormConfig
+} from '@/component/form/form-types';
 import { FormContext, FormItem } from '@/component/form';
 import { useSetState, useMount, useUpdateEffect } from 'ahooks';
 import * as _ from 'lodash';
@@ -65,6 +70,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     }
     return data;
   };
+
   const getFormItemData = (
     key: string,
     validate: boolean = false
@@ -80,6 +86,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
     }
     return data;
   };
+
   const setFormItemData = (
     key: string,
     value: any,
@@ -90,6 +97,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
       setValue && setValue(value, validate);
     }
   };
+
   const clearFormItems = () => {
     const formConfig = _.cloneDeep(props.formConfig);
     _.map(formConfig, (item) => {
@@ -98,7 +106,6 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
         const { setValue } = formItems[key];
         setValue && setValue(undefined, false);
       }
-
       return item;
     });
   };
@@ -119,6 +126,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
       formConfig: props?.formConfig
     });
   }, [props]);
+  
   useImperativeHandle(ref, () => {
     return { getFormData, getFormItemData, setFormItemData, clearFormItems };
   });

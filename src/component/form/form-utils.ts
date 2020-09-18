@@ -1,4 +1,5 @@
 import { rules as rules_ } from '@/component/form';
+import { FormItemProps, Rule } from '@/component/form/form-types';
 export const getWidth = (
   props: FormItemProps
 ): {
