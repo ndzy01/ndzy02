@@ -1,4 +1,5 @@
-import { InputProps } from 'antd/lib/input';
+import { InputProps, PasswordProps } from 'antd/lib/input';
+import { SelectProps } from 'antd/lib/select';
 
 /**
  * @description FormContextItem
@@ -26,7 +27,7 @@ export interface FormContextItem {
   setValue?: (value: any, validate?: boolean) => void;
 }
 
-export type FormItemType = 'text' | 'input';
+export type FormItemType = 'text' | 'input' | 'password' | 'select';
 
 export type RuleType = 'required';
 
@@ -73,6 +74,8 @@ export interface FormConfig {
     render?: (name: string) => JSX.Element | JSX.Element[] | null;
   };
   inputType?: InputProps;
+  passwordType?: PasswordProps;
+  selectType?: SelectProps<any>;
 }
 
 export interface FormItemProps extends FormConfig {

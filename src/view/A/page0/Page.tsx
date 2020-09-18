@@ -2,8 +2,6 @@ import React, { useRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
 import { useMount, useSetState, useUnmount } from 'ahooks';
 import { Input } from 'antd';
-// import { FormRef } from '@/component/form2/types';
-// import { Form as Form2 } from '@/component/form2';
 import { Form } from '@/component/form';
 import { useCreation } from 'ahooks';
 import NProgress from 'nprogress';
@@ -93,7 +91,7 @@ export const PageA0 = (props: Props) => {
       {/* {console.log(state)} */}
       <Form
         ref={ref}
-        column={3}
+        // column={3}
         formClassName={'formClassName'}
         formConfig={[
           {
@@ -147,6 +145,21 @@ export const PageA0 = (props: Props) => {
               }
             ],
             hidden: state.isPass === 'Y' ? true : false
+          },
+          {
+            name: 't2',
+            type: 'select',
+            label: 'select',
+            selectType: {
+              placeholder: '请选择',
+              options: [
+                {
+                  label: 'AAAA',
+                  value: '0'
+                }
+              ],
+              allowClear: true
+            }
           },
           // ------------------------
           {

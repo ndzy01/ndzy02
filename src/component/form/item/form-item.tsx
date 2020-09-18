@@ -6,7 +6,9 @@ import {
   FormItemRequireSymbol,
   FormItemValidateMsg,
   FormItemText,
-  FormItemInput
+  FormItemInput,
+  FormItemPassword,
+  FormItemSelect
 } from '@/component/form';
 import { FormItemProps, FormItemType } from '@/component/form/form-types';
 import { useMount, useUpdateEffect } from 'ahooks';
@@ -112,6 +114,10 @@ export const FormItem = (props: FormItemProps) => {
       return <FormItemText {...props} />;
     } else if (type === 'input') {
       return <FormItemInput {...props} setValue={setValue} />;
+    } else if (type === 'password') {
+      return <FormItemPassword {...props} setValue={setValue} />;
+    } else if (type === 'select') {
+      return <FormItemSelect {...props} setValue={setValue} />;
     }
   };
   return (
@@ -161,6 +167,8 @@ export const FormItem = (props: FormItemProps) => {
         }}
         className={`custom-form-wrap-item-input ${
           props?.formItemClassName?.itemInput ?? ''
+        } ${
+          state?.validate?.isPass ? '' : 'custom-form-wrap-item-validate-error'
         }`}
       >
         {renderFormItem(props.type, props)}

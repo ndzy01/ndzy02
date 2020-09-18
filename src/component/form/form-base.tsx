@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
-import '@/component/form/Form.scss';
+import '@/component/form/form.scss';
 import {
   FormProps,
   FormContextItem,
@@ -126,7 +126,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
       formConfig: props?.formConfig
     });
   }, [props]);
-  
+
   useImperativeHandle(ref, () => {
     return { getFormData, getFormItemData, setFormItemData, clearFormItems };
   });
