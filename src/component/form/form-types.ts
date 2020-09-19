@@ -90,4 +90,5 @@ export interface FormProps {
   formClassName?: string;
   formStyles?: AnyObj;
   formConfig: FormConfig[];
+  clearFormItems?: () => void;
 }

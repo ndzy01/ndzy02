@@ -108,6 +108,7 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
       }
       return item;
     });
+    props.clearFormItems && props.clearFormItems();
   };
 
   useMount(() => {
