@@ -1,13 +1,11 @@
-import React, { useContext } from 'react';
-
-import { Select } from 'antd';
-import { FormContext } from '@/component/form';
+import React from 'react';
 import { FormItemProps } from '@/component/form/form-types';
+import { Select } from 'antd';
+
 interface Props extends FormItemProps {
   setValue: (value: any) => void;
 }
 export const FormItemSelect = (props: Props) => {
-  const state = useContext(FormContext);
   const handleInput = (value: any) => {
     props.setValue(value);
   };
@@ -17,7 +15,7 @@ export const FormItemSelect = (props: Props) => {
       placeholder={props?.selectType?.placeholder}
       disabled={props?.selectType?.disabled}
       allowClear={props?.selectType?.allowClear}
-      value={state[props.name]?.value}
+      value={props?.value}
       onChange={(value) => {
         handleInput(value);
       }}

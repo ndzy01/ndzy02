@@ -1,32 +1,6 @@
 import { InputProps, PasswordProps } from 'antd/lib/input';
 import { SelectProps } from 'antd/lib/select';
 
-/**
- * @description FormContextItem
- */
-export interface FormContextItem {
-  /**
-   * @description value
-   */
-  value?: any;
-  /**
-   * @description validate 验证信息
-   */
-  validate?: {
-    isPass: boolean;
-    msg: string;
-  };
-  /**
-   * @description validateValue 验证 value
-   */
-  validateValue: (value: any) => void;
-  /**
-   * @description setValue 验证 value
-   * @description validate 是否验证
-   */
-  setValue?: (value: any, validate?: boolean) => void;
-}
-
 export type FormItemType = 'text' | 'input' | 'password' | 'select';
 
 export type RuleType = 'required';
@@ -78,17 +52,24 @@ export interface FormConfig {
   selectType?: SelectProps<any>;
 }
 
-export interface FormItemProps extends FormConfig {
-  setParentState: (value: AnyObj) => void;
-  parentColumn: number; // form 的 Column
-  formState: { [key: string]: FormContextItem };
-  [key: string]: any;
-}
-
 export interface FormProps {
+  ref: any;
   column?: number;
   formClassName?: string;
   formStyles?: AnyObj;
   formConfig: FormConfig[];
-  clearFormItems?: () => void;
+}
+
+export interface FormItemState {
+  value?: any;
+  validate?: {
+    isPass: boolean;
+    msg: string;
+  };
+}
+
+export interface FormItemProps extends FormConfig {
+  ref: any;
+  parentColumn: number; // form 的 Column
+  [key: string]: any;
 }

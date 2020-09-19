@@ -1,13 +1,11 @@
-import React, { useContext } from 'react';
-
-import { Input } from 'antd';
-import { FormContext } from '@/component/form';
+import React from 'react';
 import { FormItemProps } from '@/component/form/form-types';
+import { Input } from 'antd';
+
 interface Props extends FormItemProps {
   setValue: (value: any) => void;
 }
 export const FormItemInput = (props: Props) => {
-  const state = useContext(FormContext);
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -21,7 +19,7 @@ export const FormItemInput = (props: Props) => {
       suffix={props?.inputType?.suffix}
       addonAfter={props?.inputType?.addonAfter}
       disabled={props?.inputType?.disabled}
-      value={state[props.name]?.value}
+      value={props?.value}
       onChange={(e) => {
         handleInput(e);
       }}

@@ -1,184 +1,146 @@
-import React, { useContext, useState } from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import {
-  FormContext,
+  FormItemProps,
+  FormItemState,
+  FormItemType
+} from '@/component/form/form-types';
+import {
   getWidth,
   customValidateValue,
-  FormItemRequireSymbol,
-  FormItemValidateMsg,
-  FormItemText,
   FormItemInput,
   FormItemPassword,
-  FormItemSelect
+  FormItemRequireSymbol,
+  FormItemSelect,
+  FormItemText,
+  FormItemValidateMsg
 } from '@/component/form';
-import { FormItemProps, FormItemType } from '@/component/form/form-types';
-import { useMount, useUpdateEffect } from 'ahooks';
-export const FormItem = (props: FormItemProps) => {
-  const { [props.name]: state } = useContext(FormContext);
-  const [isValidate, setIsValidate] = useState(true);
+import { useSetState, useUpdateEffect } from 'ahooks';
+
+export const FormItem = forwardRef((props: FormItemProps, ref: any) => {
+  const [state, setState] = useSetState<FormItemState>({
+    value: props?.value,
+    validate: {
+      isPass: true,
+      msg: ''
+    }
+  });
   const validateValue = (value: any): void => {
     const result = customValidateValue(value, props.rules);
     if (result.isPass) {
-      props.setParentState({
-        [props.name]: {
-          ...state,
-          value,
-          validate: { isPass: true, msg: '' }
-        }
+      setState({
+        validate: { isPass: true, msg: '' }
       });
     } else {
-      props.setParentState({
-        [props.name]: {
-          ...state,
-          value,
-          validate: result
-        }
+      setState({
+        validate: result
       });
     }
   };
-  const setValue = (value: any, validate: boolean = true): void => {
-    setIsValidate(validate);
-    if (validate) {
-      const result = customValidateValue(value, props.rules);
-      if (result.isPass) {
-        props.setParentState({
-          [props.name]: {
-            ...state,
-            value,
-            validate: { isPass: true, msg: '' }
-          }
-        });
-      } else {
-        props.setParentState({
-          [props.name]: {
-            ...state,
-            value,
-            validate: result
-          }
-        });
-      }
-      // 应用场景
-      // 设置了showErr 为 false 不能输入 不通过校验的值
-      if (!result.isPass && result.showErr === false) {
-        return;
-      }
-    } else {
-      props.setParentState({
-        [props.name]: {
-          ...state,
-          value,
-          validate: { isPass: true, msg: '' }
-        }
-      });
+  const getValue = (isValidate: boolean = true): any => {
+    if (isValidate) {
+      validateValue(state.value);
     }
+    return state.value;
+  };
+
+  const setValue = (value: any): void => {
+    const result = customValidateValue(value, props.rules);
+
+    //TODO: 设置了showErr 代表不能输入 不通过校验的值
+    if (!result.isPass && result.showErr === false) {
+      return;
+    }
+    setState({ value, validate: result });
 
     props.onChange && props.onChange(value);
   };
-  useMount(() => {
-    props.setParentState({
-      [props.name]: {
-        ...state,
-        value: props.value,
-        validate: { isPass: true, msg: '' },
-        setValue,
-        validateValue
-      }
-    });
+  useImperativeHandle(ref, () => {
+    return {
+      setValue,
+      getValue,
+      validateValue
+    };
   });
-  useUpdateEffect(() => {
-    if (isValidate) {
-      props.setParentState({
-        [props.name]: {
-          ...state,
-          value: props.value,
-          validate: customValidateValue(props.value, props.rules),
-          mount: true,
-          setValue,
-          validateValue
-        }
-      });
-    } else {
-      props.setParentState({
-        [props.name]: {
-          ...state,
-          value: props.value,
-          validate: { isPass: true, msg: '' },
-          mount: true,
-          setValue,
-          validateValue
-        }
-      });
-    }
-  }, [props.value]);
   const renderFormItem = (type: FormItemType, props: FormItemProps) => {
     if (type === 'text') {
-      return <FormItemText {...props} />;
+      return <FormItemText {...props} value={state.value} />;
     } else if (type === 'input') {
-      return <FormItemInput {...props} setValue={setValue} />;
+      return (
+        <FormItemInput {...props} setValue={setValue} value={state.value} />
+      );
     } else if (type === 'password') {
-      return <FormItemPassword {...props} setValue={setValue} />;
+      return (
+        <FormItemPassword {...props} setValue={setValue} value={state.value} />
+      );
     } else if (type === 'select') {
-      return <FormItemSelect {...props} setValue={setValue} />;
+      return (
+        <FormItemSelect {...props} setValue={setValue} value={state.value} />
+      );
     }
   };
   return (
-    <div
-      style={{
-        ...(props?.formItemStyle?.item ?? {})
-      }}
-      className={`custom-form-wrap-item ${
-        props?.formItemClassName?.item ?? ''
-      }`}
-    >
-      {props.label && (
-        <span
-          style={{
-            ...getWidth(props).label,
-            ...(props?.formItemStyle?.itemLabel ?? {})
-          }}
-          className={`custom-form-wrap-item-label ${
-            props?.formItemClassName?.itemLabel ?? ''
-          }`}
-        >
-          <FormItemRequireSymbol
-            rules={props.rules}
-            styles={props?.formItemStyle?.itemRequireSymbol}
-            className={props?.formItemClassName?.itemRequireSymbol}
-          />
-          {props.label}：
-        </span>
-      )}
-      {/* 没有设置label 是否 占用label的位置 */}
-      {!props.label && props.labelShould && (
-        <span
-          style={{
-            ...(props?.formItemStyle?.itemLabel ?? {}),
-            ...getWidth(props).label
-          }}
-          className={`custom-form-wrap-item-label ${
-            props?.formItemClassName?.itemLabel ?? ''
-          }`}
-        />
-      )}
-      {/* ------------- */}
-      <span
+    <React.Fragment>
+      <div
         style={{
-          ...getWidth(props).input,
-          ...(props?.formItemStyle?.itemInput ?? {})
+          ...(props?.formItemStyle?.item ?? {})
         }}
-        className={`custom-form-wrap-item-input ${
-          props?.formItemClassName?.itemInput ?? ''
-        } ${
-          state?.validate?.isPass ? '' : 'custom-form-wrap-item-validate-error'
+        className={`custom-form-wrap-item ${
+          props?.formItemClassName?.item ?? ''
         }`}
       >
-        {renderFormItem(props.type, props)}
-        <FormItemValidateMsg
-          styles={props?.formItemStyle?.itemValidateMsg}
-          className={props?.formItemClassName?.itemValidateMsg}
-          isPass={state?.validate?.isPass}
-          msg={state?.validate?.msg}
-        />
-      </span>
-    </div>
+        {props.label && (
+          <span
+            style={{
+              ...getWidth(props).label,
+              ...(props?.formItemStyle?.itemLabel ?? {})
+            }}
+            className={`custom-form-wrap-item-label ${
+              props?.formItemClassName?.itemLabel ?? ''
+            }`}
+          >
+            <FormItemRequireSymbol
+              rules={props.rules}
+              styles={props?.formItemStyle?.itemRequireSymbol}
+              className={props?.formItemClassName?.itemRequireSymbol}
+            />
+            {props.label}：
+          </span>
+        )}
+        {/* 没有设置label 是否 占用label的位置 */}
+        {!props.label && props.labelShould && (
+          <span
+            style={{
+              ...(props?.formItemStyle?.itemLabel ?? {}),
+              ...getWidth(props).label
+            }}
+            className={`custom-form-wrap-item-label ${
+              props?.formItemClassName?.itemLabel ?? ''
+            }`}
+          />
+        )}
+        {/* ------------- */}
+        <span
+          style={{
+            ...getWidth(props).input,
+            ...(props?.formItemStyle?.itemInput ?? {})
+          }}
+          className={`custom-form-wrap-item-input ${
+            props?.formItemClassName?.itemInput ?? ''
+          } ${
+            state?.validate?.isPass === false
+              ? 'custom-form-wrap-item-validate-error'
+              : ''
+          }`}
+        >
+          {renderFormItem(props.type, props)}
+          <FormItemValidateMsg
+            styles={props?.formItemStyle?.itemValidateMsg}
+            className={props?.formItemClassName?.itemValidateMsg}
+            isPass={state?.validate?.isPass}
+            msg={state?.validate?.msg}
+          />
+        </span>
+      </div>
+    </React.Fragment>
   );
-};
+});

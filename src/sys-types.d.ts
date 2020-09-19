@@ -10,15 +10,13 @@ interface AnyObj {
 interface FormRef {
   current: {
     getFormData?: (validate?: boolean) => {} | boolean;
-    getFormItemData?: (key: string, validate: boolean = true) => {} | boolean;
+    getFormItemData?: (key: string) => {} | boolean;
     setFormItemData?: (
       key: string,
       value: any,
       validate: boolean = false
     ) => void;
     clearFormItems?: () => void;
-    // handleReset?: () => any;
-    // handleSearch?: () => any;
     [key: string]: any;
   };
   [key: string]: any;

@@ -1,150 +1,60 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { FormProps } from '@/component/form/form-types';
+import { FormItem } from '@/component/form';
 import '@/component/form/form.scss';
-import {
-  FormProps,
-  FormContextItem,
-  FormConfig
-} from '@/component/form/form-types';
-import { FormContext, FormItem } from '@/component/form';
-import { useSetState, useMount, useUpdateEffect } from 'ahooks';
-import * as _ from 'lodash';
+import { useMount } from 'ahooks';
 
-export const Form = forwardRef((props: FormProps, ref: any) => {
-  const [formItems, setFormItems] = useSetState<{
-    [key: string]: FormContextItem;
-  }>({});
-
-  const [state, setState] = useSetState<{
-    column?: number;
-    formClassName?: string;
-    formStyles?: AnyObj;
-    formConfig: FormConfig[];
-  }>({
-    column: undefined,
-    formClassName: undefined,
-    formStyles: undefined,
-    formConfig: []
+export const FormBase = forwardRef((props: FormProps, ref: any) => {
+  const itemRefs: AnyObj = {};
+  props.formConfig.forEach((item) => {
+    itemRefs[item.name] = useRef();
   });
 
-  const getFormData = (validate: boolean = true): {} | boolean => {
+  const getFormData = (isValidate: boolean = true): {} | boolean => {
     const data: AnyObj = {};
-    const formConfig = _.cloneDeep(props.formConfig);
     let isAllPass = true;
 
-    _.map(formConfig, (item) => {
-      const key = item.name;
-      const { validateValue, value } = formItems[key];
-      // 隐藏不获取数据 不校验
-      if (!item.hidden) {
-        if (validate) {
-          validateValue && validateValue(value);
-        }
-        data[key] = value;
+    props.formConfig.forEach((item) => {
+      if (!itemRefs[item.name]) {
+        return;
       }
-      return item;
+      console.log(itemRefs[item.name]);
+
+      const value =
+        itemRefs[item.name].current.getValue &&
+        itemRefs[item.name].current.getValue(isValidate);
+
+      data[item.name] = value;
+
+      if (value === false) {
+        isAllPass = false;
+      }
     });
 
-    for (let index = 0; index < formConfig.length; index++) {
-      const element = formConfig[index];
-      const key = element.name;
-      const { validate } = formItems[key];
-
-      if (!formItems[key]) {
-        break;
-      }
-      // 隐藏不获取数据 不校验
-      if (!element.hidden) {
-        if (validate) {
-          isAllPass = validate.isPass;
-          if (validate.isPass === false) {
-            break;
-          }
-        }
-      }
-    }
     if (!isAllPass) {
-      if (validate) {
-        return false;
-      }
-      return data;
-    }
-    return data;
-  };
-
-  const getFormItemData = (
-    key: string,
-    validate: boolean = false
-  ): {} | boolean => {
-    const data: AnyObj = {};
-    if (!formItems[key]) {
       return false;
     }
-    const { validateValue, value } = formItems[key];
-    data[key] = value;
-    if (validate) {
-      validateValue && validateValue(value);
-    }
+
     return data;
   };
-
-  const setFormItemData = (
-    key: string,
-    value: any,
-    validate: boolean = false
-  ) => {
-    if (formItems[key]) {
-      const { setValue } = formItems[key];
-      setValue && setValue(value, validate);
-    }
-  };
-
-  const clearFormItems = () => {
-    const formConfig = _.cloneDeep(props.formConfig);
-    _.map(formConfig, (item) => {
-      const key = item.name;
-      if (formItems[key]) {
-        const { setValue } = formItems[key];
-        setValue && setValue(undefined, false);
-      }
-      return item;
-    });
-    props.clearFormItems && props.clearFormItems();
-  };
-
-  useMount(() => {
-    setState({
-      column: props?.column,
-      formClassName: props?.formClassName,
-      formStyles: props?.formStyles,
-      formConfig: props?.formConfig
-    });
-  });
-  useUpdateEffect(() => {
-    setState({
-      column: props?.column,
-      formClassName: props?.formClassName,
-      formStyles: props?.formStyles,
-      formConfig: props?.formConfig
-    });
-  }, [props]);
-
   useImperativeHandle(ref, () => {
-    return { getFormData, getFormItemData, setFormItemData, clearFormItems };
+    return {
+      getFormData
+    };
   });
   return (
-    <FormContext.Provider value={formItems}>
+    <React.Fragment>
       <div
-        ref={ref}
-        style={{ ...(state?.formStyles ?? {}) }}
-        className={`custom-form ${state?.formClassName ?? ''}`}
+        style={{ ...(props?.formStyles ?? {}) }}
+        className={`custom-form ${props?.formClassName ?? ''}`}
       >
-        {state?.formConfig?.map((item) => {
+        {props?.formConfig?.map((item) => {
           // 如果有 hidden 属性 不渲染
           if (item?.hidden) {
             return null;
           }
 
-          let column = state?.column ?? 1;
+          let column = props?.column ?? 1;
 
           if (item.column && item.column <= column) {
             column = column / item.column;
@@ -159,16 +69,15 @@ export const Form = forwardRef((props: FormProps, ref: any) => {
               key={item.name}
             >
               <FormItem
+                ref={itemRefs[item.name]}
                 key={item.name}
-                setParentState={setFormItems}
-                parentColumn={state?.column ?? 1}
-                formState={formItems}
+                parentColumn={props?.column ?? 1}
                 {...item}
               />
             </div>
           );
         }) ?? null}
       </div>
-    </FormContext.Provider>
+    </React.Fragment>
   );
 });

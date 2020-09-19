@@ -1,13 +1,11 @@
-import React, { useContext } from 'react';
-
-import { Input } from 'antd';
-import { FormContext } from '@/component/form';
+import React from 'react';
 import { FormItemProps } from '@/component/form/form-types';
+import { Input } from 'antd';
+
 interface Props extends FormItemProps {
   setValue: (value: any) => void;
 }
 export const FormItemPassword = (props: Props) => {
-  const state = useContext(FormContext);
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -20,7 +18,7 @@ export const FormItemPassword = (props: Props) => {
       visibilityToggle={props?.passwordType?.visibilityToggle}
       placeholder={props?.passwordType?.placeholder}
       disabled={props?.passwordType?.disabled}
-      value={state[props.name]?.value}
+      value={props?.value}
       onChange={(e) => {
         handleInput(e);
       }}

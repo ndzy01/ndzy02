@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import { RouteChildrenProps } from 'react-router-dom';
 import { useMount, useSetState, useUnmount } from 'ahooks';
 import { Input } from 'antd';
-import { Form } from '@/component/form';
+// import { Form } from '@/component/form';
+import { FormBase } from '@/component/form';
 import { useCreation } from 'ahooks';
 import NProgress from 'nprogress';
 
@@ -36,19 +37,14 @@ export const PageA0 = (props: Props) => {
   };
   const getData1 = () => {
     console.log(
-      ref.current.getFormItemData && ref.current.getFormItemData('t3', false)
+      ref.current.getFormItemData && ref.current.getFormItemData('t3')
     );
   };
   const getData2 = () => {
     ref.current.clearFormItems && ref.current.clearFormItems();
-    setState({
-      value: undefined
-    });
   };
   const getData3 = () => {
-    ref.current.setFormItemData && ref.current.setFormItemData('t3', undefined);
-
-    // ref.current.handleReset && ref.current.handleReset();
+    ref.current.setFormItemData && ref.current.setFormItemData('t3', '22');
   };
 
   return (
@@ -88,7 +84,19 @@ export const PageA0 = (props: Props) => {
       >
         重置
       </button>
-      <Form
+      <FormBase
+        ref={ref}
+        formConfig={[
+          {
+            name: 't3',
+            label: state.isPass === 'Y' ? 'abc' : 'BBB',
+            type: 'input',
+            value: state.value1,
+            rules: [{ type: 'required' }]
+          }
+        ]}
+      ></FormBase>
+      {/* <Form
         ref={ref}
         formClassName={'formClassName'}
         formConfig={[
@@ -98,6 +106,11 @@ export const PageA0 = (props: Props) => {
             labelShould: true,
             type: 'text',
             value: state.value,
+            // onChange: (value) => {
+            //   setState({
+            //     value: value
+            //   });
+            // },
             textType: {
               render: () => (
                 <>
@@ -141,20 +154,20 @@ export const PageA0 = (props: Props) => {
             label: state.isPass === 'Y' ? 'abc' : 'BBB',
             type: 'input',
             value: state.value1,
-            onChange: (value) => {
-              // 使用方式 配合内部状态 实现 属性的自由配置
-              if (value === '22') {
-                setState({
-                  isPass: 'Y',
-                  value1: value
-                });
-              } else {
-                setState({
-                  isPass: 'N',
-                  value1: value
-                });
-              }
-            },
+            // onChange: (value) => {
+            //   // 使用方式 配合内部状态 实现 属性的自由配置
+            //   if (value === '22') {
+            //     setState({
+            //       isPass: 'Y',
+            //       value1: value
+            //     });
+            //   } else {
+            //     setState({
+            //       isPass: 'N',
+            //       value1: value
+            //     });
+            //   }
+            // },
             rules:
               state.isPass !== 'Y'
                 ? [
@@ -179,13 +192,8 @@ export const PageA0 = (props: Props) => {
                 : []
           }
         ]}
-        clearFormItems={() => {
-          setState({
-            value1: undefined,
-            value: undefined
-          });
-        }}
       ></Form>
+    */}
     </div>
   );
 };
