@@ -5,19 +5,18 @@ import {
   CLEAR_BREADCRUMB
 } from '@/redux/actionTypes';
 
-interface BreadcrumbStore {
-  path?: string;
+interface BreadcrumbType {
+  path: string;
   name: string;
 }
 
-const breadcrumb: BreadcrumbStore[] = [];
+const breadcrumb: BreadcrumbType[] = [];
 
 const breadcrumbAction = createActions({
-  [CHANGE_BREADCRUMB]: (breadcrum: BreadcrumbStore) => breadcrum,
-  [RESET_BREADCRUMB]: (breadcrums: BreadcrumbStore[]) => breadcrums,
+  [CHANGE_BREADCRUMB]: (breadcrums: BreadcrumbType) => breadcrums,
+  [RESET_BREADCRUMB]: (breadcrumsList: BreadcrumbType[]) => breadcrumsList,
   [CLEAR_BREADCRUMB]: () => []
 });
-// console.log(breadcrumbAction);
 export const changeBreadcrumb = breadcrumbAction.changeBreadcrumb;
 export const resetBreadcrumb = breadcrumbAction.resetBreadcrumb;
 export const clearBreadcrumb = breadcrumbAction.clearBreadcrumb;

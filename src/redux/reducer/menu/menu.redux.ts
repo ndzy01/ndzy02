@@ -19,7 +19,6 @@ const menuAction = createActions({
   [MENU_SELECTKEYS]: (selectedKeys: string[]) => selectedKeys,
   [CLEAR_MENU]: () => menu
 });
-// console.log(menuAction);
 export const menuOpenkeys = menuAction.menuOpenkeys;
 export const menuSelectkeys = menuAction.menuSelectkeys;
 export const clearMenu = menuAction.clearMenu;

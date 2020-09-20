@@ -6,7 +6,6 @@ const collapsedAction = createActions({
   [CHANGE_COLLAPSED]: (collapsed: boolean) => collapsed,
   [CLEAR_COLLAPSED]: () => false
 });
-// console.log(collapsedAction);
 export const changeCollapsed = collapsedAction.changeCollapsed;
 export const clearCollapsed = collapsedAction.clearCollapsed;
 

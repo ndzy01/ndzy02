@@ -1,28 +1,24 @@
-import { combineReducers, createStore, applyMiddleware, Store } from 'redux';
 import promiseMiddleware from 'redux-promise';
-import { createLogger } from 'redux-logger';
-//
+import { applyMiddleware, combineReducers, createStore, Store } from 'redux';
 import {
   authReducer as auth,
   breadcrumbReducer as breadcrumb,
-  collapsedReducer as collapsed,
-  menuReducer as menu,
   clearAuth,
   clearBreadcrumb,
   clearCollapsed,
-  clearMenu
+  clearMenu,
+  collapsedReducer as collapsed,
+  menuReducer as menu
 } from '@/redux/reducer';
-//
 import { cacheData } from '@/redux/middleware/cacheData';
-
-//
+import { createLogger } from 'redux-logger';
 import { getSession } from '@/utils';
-import { SYSTEM_KEY, IS_REDUX_LOG } from '@/constant';
+import { IS_REDUX_LOG, SYSTEM_KEY } from '@/constant';
 
-export interface MyStore extends Store {
+export interface storeType extends Store {
   auth: AnyObj[];
   breadcrumb: {
-    path?: string;
+    path: string;
     name: string;
   }[];
   collapsed: boolean;

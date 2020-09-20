@@ -14,7 +14,7 @@ import {
   FormItemText,
   FormItemValidateMsg
 } from '@/component/form';
-import { useSetState, useUpdateEffect } from 'ahooks';
+import { useSetState } from 'ahooks';
 
 export const FormItem = forwardRef((props: FormItemProps, ref: any) => {
   const [state, setState] = useSetState<FormItemState>({

@@ -2,7 +2,6 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { FormProps } from '@/component/form/form-types';
 import { FormItem } from '@/component/form';
 import '@/component/form/form.scss';
-import { useMount } from 'ahooks';
 
 export const FormBase = forwardRef((props: FormProps, ref: any) => {
   const itemRefs: AnyObj = {};
